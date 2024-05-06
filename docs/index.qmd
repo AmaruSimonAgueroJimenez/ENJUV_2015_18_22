@@ -1,0 +1,345 @@
+---
+title: "Unintended pregnancy ENJUV 2015 2017 2022"
+author:
+- Amaru Simón Agüero Jiménez, aaguero@miuandes.cl
+- Scarllet Acuña
+- Constanza González Abarca
+- Daniela 
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Library
+
+```{r message=FALSE, warning=FALSE}
+# Load necessary packages
+install_and_load_packages <- function(packages) {
+  for (package in packages) {
+    # Comprueba si el paquete está instalado
+    if (!require(package, character.only = TRUE)) {
+      # Instala el paquete si no está instalado
+      install.packages(package)
+      # Carga el paquete después de instalarlo
+      library(package, character.only = TRUE)
+    }
+  }
+}
+
+necessary_packages <- c("haven", "knitr", "readxl", "tidyverse", "data.table", "survey", "scales","gt")
+
+install_and_load_packages(necessary_packages)
+
+opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+
+```{r}
+# Specify the directory
+directory <- paste0(gsub("/docs", "", getwd()), "/data/original_data")
+
+# Get a list of all the files in the directory
+files <- list.files(path = directory, full.names = TRUE)
+
+# Define a function to read files based on their extension
+read_file <- function(file) {
+  extension <- tools::file_ext(file)
+  switch(extension,
+         sav = read_sav(file),
+         dta = read_dta(file),
+         stop("Unsupported file type")
+  )
+}
+
+# Use lapply to read each file into a list of data frames
+data_list <- lapply(files, read_file)
+# Get the base names of the files (without directory or extension) to use as names for the list elements
+file_names <- tools::file_path_sans_ext(basename(files))
+# Assign these names to the list elements
+data_list <- setNames(data_list, file_names)
+
+female_data_list <- lapply(data_list, function(df) {
+  if("SEXO" %in% names(df)) {
+    return(df[df$SEXO == 2, ])
+  } else {
+    return(df)
+  }
+})
+
+# Define the custom transformation function
+transform_to_factor <- function(df) {
+  df[] <- lapply(df, function(col) {
+    if ("haven_labelled" %in% class(col) & is.numeric(col)) {  # Using `%in%` and `&`
+      return(haven::as_factor(col))
+    } else {
+      return(col)
+    }
+  })
+  return(df)
+}
+
+# Apply the transformation function to each data frame in the list
+female_data_list <- lapply(female_data_list, transform_to_factor)
+```
+
+# Summary
+
+```{r}
+summarize_columns <- function(df) {
+  col_names <- names(df)
+  summary_df <- data.frame(
+    "column" = character(),
+    "column label" = character(),
+    "column class" = character(),
+    "NA" = integer(),
+    stringsAsFactors = FALSE
+  )
+
+  for (col_name in col_names) {
+    column <- col_name
+    column_label <- if (!is.null(attr(df[[col_name]], "label"))) {
+      attr(df[[col_name]], "label")
+    } else {
+      "Sin label"
+    }
+    if (is.factor(df[[col_name]])) {
+      niveles <- paste(levels(df[[col_name]]), collapse = ", ")
+      column_class <- paste("Factor (", niveles, ")", sep="")
+    } else {
+      column_class <- paste0(toupper(substring(class(df[[col_name]])[1], 1, 1)), 
+                             substring(class(df[[col_name]])[1], 2))
+    }
+    NA_count <- sum(is.na(df[[col_name]]))
+    summary_df <- rbind(summary_df, data.frame(
+      column = column, 
+      "column label" = column_label, 
+      "column class" = column_class, 
+      "NA" = NA_count, 
+      stringsAsFactors = FALSE
+    ))
+  }
+  
+  return(summary_df)
+}
+
+summary_table_2015 <- summarize_columns(female_data_list$`BBDD JÓVENES 2015`)
+summary_table_2018 <- summarize_columns(female_data_list$`BBDD JÓVENES 2018`)
+summary_table_2022 <- summarize_columns(female_data_list$`BBDD JÓVENES 2022`)
+```
+
+## ENJUV 2015
+```{r}
+gt(summary_table_2015) %>% tab_header(
+    title = "ENJUV 2015")
+```
+
+## ENJUV 2018
+```{r}
+gt(summary_table_2018) %>% tab_header(
+    title = "ENJUV 2018")
+```
+
+## ENJUV 2022
+```{r}
+gt(summary_table_2018) %>% tab_header(
+    title = "ENJUV 2022")
+```
+
+```{r include=FALSE}
+#Survey: Primary Unit= "Manzana": $CONGLOMERADO, Statum: $ESTRATO, Weights: $FACTOR,
+
+female_data_list[[4]]$P130[female_data_list[[4]]$P130 == "NS-NR" | female_data_list[[4]]$P130 == "No aplica"] <- NA
+female_data_list[[5]]$P129[female_data_list[[5]]$P129 == "NS/NR"] <- NA
+female_data_list[[6]]$P90[female_data_list[[6]]$P90 == "No sabe/No responde"] <- NA
+
+
+INJUV2015.design<-svydesign(ids =~female_data_list[[4]]$FOLIO, strata =~female_data_list[[4]]$REGION, weights = ~female_data_list[[4]]$FACTOR, nest=TRUE, data=female_data_list[[4]])
+INJUV2018.design<-svydesign(ids =~female_data_list[[5]]$FOLIO, strata =~female_data_list[[5]]$REGION, weights = ~female_data_list[[5]]$FACTOR, nest=TRUE, data=female_data_list[[5]])
+INJUV2022.design<-svydesign(ids =~female_data_list[[6]]$Folio, strata =~female_data_list[[6]]$ESTRATO, weights = ~female_data_list[[6]]$FACTOR, nest=TRUE, data=female_data_list[[6]])
+
+
+#P129 Embarazo no planificado
+summary(as.factor(female_data_list[[4]]$P129))
+svymean(~P129, INJUV2015.design, na = TRUE) #PROPORCION Y ERROR ESTANDAR
+svytotal(~P129, INJUV2015.design, na = TRUE) #TOTALES Y ERROR ESTANDAR
+svytable(~P129, design = INJUV2015.design) #TABLA AGREGAR NUEVA VARIABLE: + NUEVAVARIABLE
+confint(svytotal(~P129, INJUV2015.design, na = TRUE))
+#P129 Edad
+summary(as.factor(female_data_list[[4]]$P130))
+svymean(~P130, INJUV2015.design, na = TRUE) #PROPORCION Y ERROR ESTANDAR
+svytotal(~P130, INJUV2015.design, na = TRUE) #TOTALES Y ERROR ESTANDAR
+svytable(~P130, design = INJUV2015.design) #TABLA AGREGAR NUEVA VARIABLE: + NUEVAVARIABLE
+confint(svytotal(~P130, INJUV2015.design, na = TRUE))
+
+
+#P128 Embarazo no planificado
+summary(as.factor(female_data_list[[5]]$P128))
+svymean(~P128, INJUV2018.design, na = TRUE) #PROPORCION Y ERROR ESTANDAR
+svytotal(~P128, INJUV2018.design, na = TRUE) #TOTALES Y ERROR ESTANDAR
+svytable(~P128, design = INJUV2018.design) #TABLA AGREGAR NUEVA VARIABLE: + NUEVAVARIABLE
+confint(svytotal(~P128, INJUV2018.design, na = TRUE))
+#P129 Edad
+summary(as.factor(female_data_list[[5]]$P129))
+svymean(~P129, INJUV2018.design, na = TRUE) #PROPORCION Y ERROR ESTANDAR
+svytotal(~P129, INJUV2018.design, na = TRUE) #TOTALES Y ERROR ESTANDAR
+svytable(~P129, design = INJUV2018.design) #TABLA AGREGAR NUEVA VARIABLE: + NUEVAVARIABLE
+confint(svytotal(~P129, INJUV2018.design, na = TRUE))
+
+
+#P89 Embarazo no planificado
+summary(as.factor(female_data_list[[6]]$P89)) 
+svymean(~P89, INJUV2022.design, na = TRUE) #PROPORCION Y ERROR ESTANDAR
+svytotal(~P89, INJUV2022.design, na = TRUE) #TOTALES Y ERROR ESTANDAR
+svytable(~P89, design = INJUV2022.design) #TABLA AGREGAR NUEVA VARIABLE: + NUEVAVARIABLE
+confint(svytotal(~P89, INJUV2022.design, na = TRUE))
+#P90 Edad
+summary(as.factor(female_data_list[[6]]$P90))#EDAD
+svymean(~P90, INJUV2022.design, na = TRUE) #PROPORCION Y ERROR ESTANDAR
+svytotal(~P90, INJUV2022.design, na = TRUE) #TOTALES Y ERROR ESTANDAR
+svytable(~P90, design = INJUV2022.design) #TABLA AGREGAR NUEVA VARIABLE: + NUEVAVARIABLE
+confint(svytotal(~P90, INJUV2022.design, na = TRUE))
+```
+
+```{r}
+library(survey)
+# Function to calculate the required statistics
+calculate_stats <- function(variable, design) {
+  mean_estimate <- svymean(as.formula(paste0("~", variable)), design, na.rm = TRUE)
+  total_estimate <- svytotal(as.formula(paste0("~", variable)), design, na.rm = TRUE)
+  conf_intervalt <- confint(total_estimate)
+  conf_intervalm <- confint(mean_estimate)
+  
+  return(cbind(
+    Proportion = coef(mean_estimate),
+    Proportion_SE = SE(mean_estimate),
+    Prop_Confidence_Lower = conf_intervalm[, 1],
+    Prop_Confidence_Upper = conf_intervalm[, 2],
+    Total = coef(total_estimate),
+    Total_SE = SE(total_estimate),
+    Total_Confidence_Lower = conf_intervalt[, 1],
+    Total_Confidence_Upper = conf_intervalt[, 2]
+  ))
+}
+#EMBARAZO NO PLANIFICADO
+# Calculations for each year and variable
+stats_2015_P129 <- calculate_stats("P129", INJUV2015.design)
+stats_2018_P128 <- calculate_stats("P128", INJUV2018.design)
+stats_2022_P89 <- calculate_stats("P89", INJUV2022.design)
+
+# Combining all results into a single data frame
+results_df <- rbind(
+  data.frame(Year = "2015", Variable = "P129", stats_2015_P129),
+  data.frame(Year = "2018", Variable = "P128", stats_2018_P128),
+  data.frame(Year = "2022", Variable = "P89", stats_2022_P89)
+) %>% mutate(Index = rownames(.))
+
+strings_to_remove <- c("P129","P128","P891. ","P892. ","P89")
+results_df$Index <- Reduce(function(vector, pattern) gsub(pattern, "", vector), 
+                         strings_to_remove, 
+                         results_df$Index)
+results_df$Index <- gsub("í", "i", results_df$Index)
+results_df<-results_df %>% filter(Index=="Si")
+
+#EDAD
+# Calculations for each year and variable
+stats_2015_P130 <- calculate_stats("P130", INJUV2015.design)
+stats_2018_P129 <- calculate_stats("P129", INJUV2018.design)
+stats_2022_P90 <- calculate_stats("P90", INJUV2022.design)
+
+# Combining all results into a single data frame
+results_df_2 <- rbind(
+  data.frame(Year = "2015", Variable = "P130", stats_2015_P130),
+  data.frame(Year = "2018", Variable = "P129", stats_2018_P129),
+  data.frame(Year = "2022", Variable = "P90", stats_2022_P90)
+) %>% mutate("Años" = rownames(.))
+
+strings_to_remove <- c("P130","P129","P901. ","P902. ","P90")
+results_df_2$Años <- Reduce(function(vector, pattern) gsub(pattern, "", vector), 
+                         strings_to_remove, 
+                         results_df_2$Años)
+results_df_2$Años <- as.numeric(results_df_2$Años)
+results_df_2 <- results_df_2 %>%
+                drop_na() %>%
+                filter(Años != 1) %>%
+                mutate(across(where(is.numeric), ~if_else(. < 0, 0, .)))
+
+```
+
+# Unintended pregnancy
+
+```{r}
+ggplot(results_df, aes(x=Year, y=Proportion, fill=Year)) +
+  geom_bar(stat="identity", position=position_dodge(), alpha=0.7) +
+  geom_errorbar(aes(ymin=Prop_Confidence_Lower, ymax=Prop_Confidence_Upper), width=.2, position=position_dodge(.9), color="purple4", alpha=0.5) +
+  scale_fill_brewer(palette="RdPu") +
+  theme_minimal() +
+  theme(legend.position="none") + 
+  geom_text(aes(label=round(Proportion, 2)), hjust=1.5,vjust=-0.5,size=6,color="purple",position=position_dodge(0.9), alpha=0.8)+
+  ylab("Proportion of unintended pregnancy \n among Chilean women aged 15-29 years (CI 95%)")
+
+ggplot(results_df, aes(x=Year, y=Total, fill=Year)) +
+  geom_bar(stat="identity", position=position_dodge(), alpha=0.7) +
+  geom_errorbar(aes(ymin=Total_Confidence_Lower, ymax=Total_Confidence_Upper), width=.2, position=position_dodge(.9), color="purple4", alpha=0.5) +
+  scale_fill_brewer(palette="RdPu") +
+  theme_minimal() +
+  theme(legend.position="none") + 
+  geom_text(aes(label=round(Total, 0)),hjust=1, vjust=-0.5,size=6,color="purple",position=position_dodge(0.9), alpha=0.8)+
+  ylab("Total of unintended pregnancy \n among Chilean women aged 15-29 years (CI 95%)") +
+  scale_y_continuous(labels = label_number())
+
+cc <- scales::seq_gradient_pal("pink", "purple4", "Lab")(seq(0,1,length.out=20))
+
+ggplot(results_df_2, aes(x=as.factor(Años), y=Proportion, fill=as.factor(Años))) +
+  geom_bar(stat="identity", position=position_dodge(), alpha=0.7) +
+  geom_errorbar(aes(ymin=Prop_Confidence_Lower, ymax=Prop_Confidence_Upper), width=.2, position=position_dodge(.9), color="purple4", alpha=0.5) +
+  scale_fill_manual(values = cc) +
+  theme_minimal() +
+  theme(legend.position="none",
+        axis.text.x = element_text(size = 5)) +
+  ylab("Proportion of unintended pregnancy \n among Chilean women aged 15-29 years(CI 95%)") + facet_wrap(~ Year) +
+  xlab("Age at unintended pregnancy.")
+
+ggplot(results_df_2, aes(x=as.factor(Años), y=Total, fill=as.factor(Años))) +
+  geom_bar(stat="identity", position=position_dodge(), alpha=0.7) +
+  geom_errorbar(aes(ymin=Total_Confidence_Lower, ymax=Total_Confidence_Upper), width=.2, position=position_dodge(.9), color="purple4", alpha=0.5) +
+  scale_fill_manual(values = cc) +
+  theme_minimal() +
+  theme(legend.position="none",
+        axis.text.x = element_text(size = 5)) +
+  ylab("Total of unintended pregnancy \n among Chilean Women aged 15-29 years (CI 95%)") + facet_wrap(~ Year) +
+  xlab("Age at unintended pregnancy.")
+
+# ggsave("fig1.png", width = 6, height = 6, dpi = 600)
+# ggsave("fig2.png", width = 6, height = 6, dpi = 600)
+# ggsave("fig3.png", width = 10, height = 6, dpi = 600)
+```
+
+```{r}
+dat_for_kmeans<-female_data_list[[6]][,314:405]
+# for (i in c(1:6,8,10:17)) {
+#   dat2[,i]<-factor(dat2[,i], levels = levels(dat2[,i]), labels = paste0(colnames(dat2[i]),"_",levels(dat2[,i])))
+# }
+# 
+# res.famd <- FAMD(dat2, graph = F)
+# fviz_screeplot(res.famd)
+# fviz_famd_var(res.famd, "quanti.var", col.var = "contrib",
+#               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+#               repel = TRUE)
+# fviz_famd_var(res.famd, "quali.var", col.var = "contrib",
+#               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+#               repel = TRUE,labelsize = 3)
+# fviz_famd_var(res.famd, col.var = "contrib",
+#               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+#               repel = TRUE)
+# fviz_famd_ind(res.famd, col.ind = "contrib",
+#               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+#               repel = TRUE,geom = "point")
+
+#individual k means#############################################################
+#https://rpubs.com/rdelgado/399475
+```
