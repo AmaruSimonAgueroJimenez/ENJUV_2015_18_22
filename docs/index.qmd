@@ -5,7 +5,7 @@ author:
 - Scarllet Acuña Salinas,
 - Alejandra Campos Becerra,
 - Constanza González Abarca,
-- Daniela Cáceres Arriagada, 
+- Daniela Cáceres Arriagada
 format:
   html:
     toc: true
