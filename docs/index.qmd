@@ -9,6 +9,8 @@ format:
   html:
     toc: true
     number-sections: true
+    css: styles.css
+    code-fold: true
 ---
 
 # Library
