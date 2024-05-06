@@ -2,9 +2,10 @@
 title: "Unintended pregnancy ENJUV 2015 2017 2022"
 author:
 - Amaru Simón Agüero Jiménez, aaguero@miuandes.cl
-- Scarllet Acuña
-- Constanza González Abarca
-- Daniela 
+- Scarllet Acuña Salinas,
+- Alejandra Campos Becerra,
+- Constanza González Abarca,
+- Daniela Cáceres Arriagada, 
 format:
   html:
     toc: true
