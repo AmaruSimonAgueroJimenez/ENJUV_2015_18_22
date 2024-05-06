@@ -93,15 +93,20 @@ female_data_list <- lapply(female_data_list, transform_to_factor)
 # Summary
 
 ```{r}
+
 summarize_columns <- function(df) {
   col_names <- names(df)
   summary_df <- data.frame(
-    "column" = character(),
+    ID = integer(),  # Initialize the ID column
+    column = character(),
     "column label" = character(),
     "column class" = character(),
     "NA" = integer(),
     stringsAsFactors = FALSE
   )
+
+  # Initialize an ID counter
+  id_counter <- 1
 
   for (col_name in col_names) {
     column <- col_name
@@ -114,17 +119,21 @@ summarize_columns <- function(df) {
       niveles <- paste(levels(df[[col_name]]), collapse = ", ")
       column_class <- paste("Factor (", niveles, ")", sep="")
     } else {
-      column_class <- paste0(toupper(substring(class(df[[col_name]])[1], 1, 1)), 
+      column_class <- paste0(toupper(substring(class(df[[col_name]])[1], 1, 1)),
                              substring(class(df[[col_name]])[1], 2))
     }
     NA_count <- sum(is.na(df[[col_name]]))
     summary_df <- rbind(summary_df, data.frame(
-      column = column, 
-      "column label" = column_label, 
-      "column class" = column_class, 
-      "NA" = NA_count, 
+      ID = id_counter,  # Assign the current value of the ID counter
+      column = column,
+      "column label" = column_label,
+      "column class" = column_class,
+      "NA" = NA_count,
       stringsAsFactors = FALSE
     ))
+
+    # Increment the ID counter for the next row
+    id_counter <- id_counter + 1
   }
   
   return(summary_df)
@@ -209,7 +218,6 @@ confint(svytotal(~P90, INJUV2022.design, na = TRUE))
 ```
 
 ```{r}
-library(survey)
 # Function to calculate the required statistics
 calculate_stats <- function(variable, design) {
   mean_estimate <- svymean(as.formula(paste0("~", variable)), design, na.rm = TRUE)
@@ -228,7 +236,6 @@ calculate_stats <- function(variable, design) {
     Total_Confidence_Upper = conf_intervalt[, 2]
   ))
 }
-#EMBARAZO NO PLANIFICADO
 # Calculations for each year and variable
 stats_2015_P129 <- calculate_stats("P129", INJUV2015.design)
 stats_2018_P128 <- calculate_stats("P128", INJUV2018.design)
