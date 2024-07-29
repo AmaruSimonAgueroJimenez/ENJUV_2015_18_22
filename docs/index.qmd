@@ -30,11 +30,7 @@ install_and_load_packages <- function(packages) {
   }
 }
 
-<<<<<<< HEAD
 necessary_packages <- c("haven", "knitr", "readxl", "tidyverse","Hmisc", "data.table", "survey", "scales","gt","FactoMineR","factoextra","vcd","reshape2","corrplot","klaR", "stringr")
-=======
-necessary_packages <- c("haven", "knitr", "readxl", "tidyverse","Hmisc", "data.table", "survey", "scales","gt")
->>>>>>> a3106ee3a5fa05eba2567a8e2f822050872ba909
 
 install_and_load_packages(necessary_packages)
 
