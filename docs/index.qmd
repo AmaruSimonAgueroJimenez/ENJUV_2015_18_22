@@ -173,11 +173,7 @@ preguntas_encabezados_2018 <- c(
   P120 = "¿A qué edad tuviste tu primera relación sexual con penetración?",
   P121 = "¿Con cuantas personas has tenido relaciones sexuales en los ultimos doce meses?",
   P123 = "¿Qué método(s) anticonceptivo(s) usaste tú o tu pareja en tu PRIMERA relación sexual?",
-  P128 = "¿Te ha tocado vivir un embarazo no planificado?",
   P129 = "¿Qué edad tenías tú cuando te tocó vivir a ti o tu pareja un embarazo no planificado?",
-  P130 = "¿Te has hecho o inducido algún aborto?",
-  P131 = "Y este aborto, ¿fue realizado bajo alguna causal?",
-  P138 = "¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)?",
   P149 = "Aunque sea solo una vez, ¿se ha dado alguna de las siguientes situaciones en tu relación de pareja actual?",
   P150 = "Por favor responde si o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo",
   P151 = "Por favor responde si o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo"
@@ -605,10 +601,6 @@ fviz_mca_var(res.mca, choice = "mca.cor", repel = TRUE, labelsize = 3)
 #              col.var = "cos2",
 #              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
 #              labelsize = 3) 
-
-
-#individual k means#############################################################
-#https://rpubs.com/rdelgado/399475
 ```
 
 
@@ -696,3 +688,180 @@ ggplot(frequencies_combined, aes(x = Value, y = Frequency, fill = Response)) +
 
 ```
 
+## Selection of ENJUV 2018 Variables and Clustering with k-Modes
+```{r}
+#| fig.width: 14
+#| fig.height: 12
+
+famdINJUV2018 <- female_data_list$`BBDD JÓVENES 2018` %>% dplyr::select(REGION,
+                                                          ZONA,
+                                                          NSE,
+                                                          P10,
+                                                          P12,
+                                                          P19_5,
+                                                          P22,
+                                                          P26,
+                                                          P30,
+                                                          P31,
+                                                          P35_8,
+                                                          P35_9,
+                                                          P107,
+                                                          P112_1,
+                                                          P112_2,
+                                                          P112_3,
+                                                          P112_4,
+                                                          P112_5,
+                                                          P113_1,
+                                                          P113_2,
+                                                          P113_3,
+                                                          P113_4,
+                                                          P113_5,
+                                                          P116_1,
+                                                          P116_4,
+                                                          P120,
+                                                          P121,
+                                                          P126_1,
+                                                          P128,
+                                                          P138_1,
+                                                          P139,
+                                                          P140) %>% drop_na()
+
+# Function to remove SPSS attributes
+remove_spss_attrs <- function(df) {
+  for (col in names(df)) {
+    attr(df[[col]], "format.spss") <- NULL
+    attr(df[[col]], "display_width") <- NULL
+  }
+  return(df)
+}
+
+famdINJUV2018 <- famdINJUV2018 %>%
+  mutate(across(everything(), ~ as_factor(.)))
+
+# Función para eliminar atributos SPSS y obtener etiquetas de columnas
+get_labels <- function(df) {
+  labels <- sapply(df, function(col) attr(col, "label"))
+  names(labels) <- names(df)
+  labels
+}
+
+# Obtener etiquetas de columnas
+labels <- get_labels(famdINJUV2018)
+
+# Cambiar nombres de columnas por las etiquetas
+famdINJUV2018 <- famdINJUV2018 %>%
+  rename_with(~ labels[.x], everything())
+
+# Función para eliminar atributos SPSS
+remove_spss_attrs <- function(df) {
+  for (col in names(df)) {
+    attr(df[[col]], "format.spss") <- NULL
+    attr(df[[col]], "display_width") <- NULL
+  }
+  return(df)
+}
+
+# Eliminar atributos SPSS
+famdINJUV2018_clean <- remove_spss_attrs(famdINJUV2018)
+
+res.mca <- MCA(famdINJUV2018_clean, graph = F, ncp=10)
+fviz_screeplot(res.mca, addlabels = TRUE, ylim = c(0, 50))
+# fviz_mca_biplot(res.mca, repel = TRUE)
+# Contribution of variables to dimensions
+# fviz_contrib(res.mca, choice = "var", axes = 1, top = 10)
+# fviz_contrib(res.mca, choice = "var", axes = 2, top = 10)
+# fviz_contrib(res.mca, choice = "var", axes = 3, top = 10)
+
+# Plot of the variable categories
+fviz_mca_var(res.mca, choice = "mca.cor", repel = TRUE, labelsize = 3)
+# fviz_cos2(res.mca, choice = "var", axes = 2)
+# fviz_contrib(res.mca, choice = "var", axes = 2, top = 15)
+# fviz_mca_var(res.mca, 
+#              repel = TRUE, 
+#              col.var = "cos2",
+#              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+#              labelsize = 3) 
+```
+
+```{r}
+set.seed(1234)
+
+kmodes_result_all <- kmodes(as.matrix(famdINJUV2018_clean), iter.max = 1000, modes = 15)
+
+# Añadir los resultados del clustering a los datos
+famdINJUV2018_clean$Cluster <- kmodes_result_all$cluster
+
+# Calcular la proporción de cada cluster dentro de los niveles de P128
+proportion_p128 <- famdINJUV2018_clean %>%
+  count(`P128. ¿Te ha tocado vivir un embarazo no planificado?`, Cluster) %>%
+  group_by(`P128. ¿Te ha tocado vivir un embarazo no planificado?`) %>%
+  mutate(Proportion = n / sum(n)) %>% filter(`P128. ¿Te ha tocado vivir un embarazo no planificado?` != "NS/NR")
+
+# Filtrar los datos para el cluster 7 con la respuesta "Sí" en P128
+cluster11_yes <- famdINJUV2018_clean %>%
+  filter(Cluster == 11 & `P128. ¿Te ha tocado vivir un embarazo no planificado?` == "Si")
+
+# Filtrar los datos para el cluster 4 con la respuesta "No" en P128
+cluster9_no <- famdINJUV2018_clean %>%
+  filter(Cluster == 9 & `P128. ¿Te ha tocado vivir un embarazo no planificado?` == "No")
+
+# Añadir una columna para la respuesta en P128
+cluster11_yes <- cluster11_yes %>%
+  mutate(Response = "Si")
+
+cluster9_no <- cluster9_no %>%
+  mutate(Response = "No")
+
+# Combinar ambos clusters en un solo data frame
+combined_data <- bind_rows(cluster11_yes, cluster9_no)
+
+# Convertir los datos a formato largo
+data_long_combined <- combined_data %>%
+  dplyr::select(-Cluster, -`P128. ¿Te ha tocado vivir un embarazo no planificado?`) %>%
+  pivot_longer(-Response, names_to = "Variable", values_to = "Value")
+
+# Calcular las frecuencias de los niveles de las variables
+frequencies_combined <- data_long_combined %>%
+  group_by(Response, Variable, Value) %>%
+  summarise(Frequency = n(), .groups = 'drop')
+```
+
+```{r}
+#| fig.width: 16
+#| fig.height: 12
+
+# Visualizar la comparación de proporciones
+ggplot(proportion_p128, aes(x = factor(Cluster), y = Proportion, fill = `P128. ¿Te ha tocado vivir un embarazo no planificado?`)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.5) +
+  scale_fill_manual(values = c("Si" = "purple", "No" = "lightblue"),
+                    breaks = c("Si", "No"),
+                    labels = c("Si", "No")) +
+  labs(fill = "P128 ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?", x = "Cluster", y = "Proporción") +
+  ggtitle("Comparación de Proporciones de Clusters entre niveles de P128") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 1, size = 10),
+    axis.text.y = element_text(size = 10),
+    strip.text = element_text(size = 10),
+    legend.position = "top"
+  )
+
+# Visualizar las frecuencias con coord_flip y sin leyenda, ajustando las etiquetas y el tamaño del texto
+ggplot(frequencies_combined, aes(x = Value, y = Frequency, fill = Response)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.5) +
+  facet_wrap(~ Variable, scales = "free_y", labeller = label_wrap_gen(width = 30)) +
+  scale_fill_manual(values = c("Si" = "purple", "No" = "skyblue"),
+                    breaks = c("Si", "No"),
+                    labels = c("Si", "No")) +
+  labs(x = "Nivel", y = "Frecuencia", fill = "P128 ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?") +
+  ggtitle("Frecuencias de Niveles de Variables en los Clusters para Respuestas 'Si' y 'No' en P128") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, size = 6),
+    axis.text.y = element_text(size = 6),
+    strip.text = element_text(size = 6),
+    legend.position = "top"
+  ) +
+  coord_flip()
+
+```

@@ -95,6 +95,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#unintended-pregnancy" id="toc-unintended-pregnancy" class="nav-link" data-scroll-target="#unintended-pregnancy"><span class="header-section-number">3</span> Unintended pregnancy</a>
   <ul class="collapse">
   <li><a href="#selection-of-enjuv-2015-variables-and-clustering-with-k-modes" id="toc-selection-of-enjuv-2015-variables-and-clustering-with-k-modes" class="nav-link" data-scroll-target="#selection-of-enjuv-2015-variables-and-clustering-with-k-modes"><span class="header-section-number">3.1</span> Selection of ENJUV 2015 Variables and Clustering with k-Modes</a></li>
+  <li><a href="#selection-of-enjuv-2018-variables-and-clustering-with-k-modes" id="toc-selection-of-enjuv-2018-variables-and-clustering-with-k-modes" class="nav-link" data-scroll-target="#selection-of-enjuv-2018-variables-and-clustering-with-k-modes"><span class="header-section-number">3.2</span> Selection of ENJUV 2018 Variables and Clustering with k-Modes</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -294,154 +295,150 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>  <span class="at">P120 =</span> <span class="st">"¿A qué edad tuviste tu primera relación sexual con penetración?"</span>,</span>
 <span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>  <span class="at">P121 =</span> <span class="st">"¿Con cuantas personas has tenido relaciones sexuales en los ultimos doce meses?"</span>,</span>
 <span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>  <span class="at">P123 =</span> <span class="st">"¿Qué método(s) anticonceptivo(s) usaste tú o tu pareja en tu PRIMERA relación sexual?"</span>,</span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">P128 =</span> <span class="st">"¿Te ha tocado vivir un embarazo no planificado?"</span>,</span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">P129 =</span> <span class="st">"¿Qué edad tenías tú cuando te tocó vivir a ti o tu pareja un embarazo no planificado?"</span>,</span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">P130 =</span> <span class="st">"¿Te has hecho o inducido algún aborto?"</span>,</span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">P131 =</span> <span class="st">"Y este aborto, ¿fue realizado bajo alguna causal?"</span>,</span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>  <span class="at">P138 =</span> <span class="st">"¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)?"</span>,</span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>  <span class="at">P149 =</span> <span class="st">"Aunque sea solo una vez, ¿se ha dado alguna de las siguientes situaciones en tu relación de pareja actual?"</span>,</span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>  <span class="at">P150 =</span> <span class="st">"Por favor responde si o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo"</span>,</span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>  <span class="at">P151 =</span> <span class="st">"Por favor responde si o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo"</span></span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (col <span class="cf">in</span> <span class="fu">colnames</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2018</span><span class="st">`</span>)) {</span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>  prefix <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"(P</span><span class="sc">\\</span><span class="st">d+).*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, col)</span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (prefix <span class="sc">%in%</span> <span class="fu">names</span>(preguntas_encabezados_2018)) {</span>
-<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>    current_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.null</span>(<span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2018</span><span class="st">`</span>[[col]])), <span class="st">""</span>, <span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2018</span><span class="st">`</span>[[col]]))</span>
-<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>    cleaned_label <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^(P</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">s*)|(_</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">s*)"</span>, <span class="st">""</span>, current_label)</span>
-<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>    new_label <span class="ot">&lt;-</span> <span class="fu">paste0</span>(col, <span class="st">". "</span>, preguntas_encabezados_2018[prefix], <span class="st">" "</span>, cleaned_label)</span>
-<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>    <span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2018</span><span class="st">`</span>[[col]]) <span class="ot">&lt;-</span> new_label</span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>preguntas_encabezados_2022 <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>  <span class="at">P1 =</span> <span class="st">"En los últimos 12 meses, es decir, desde (xxx) hasta hoy, ¿has participado activamente en alguna de las siguientes organizaciones o grupo organizado?"</span>,</span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">P2 =</span> <span class="st">"¿Y participaste con algún cargo de dirigente u organizador/a?"</span>,</span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>  <span class="at">P3 =</span> <span class="st">"En los últimos 12 meses, es decir, desde (xxx), hasta hoy, ¿cuáles de las siguientes actividades de ayuda a la comunidad o trabajo de voluntariado NO REMUNERADO has realizado?"</span>,</span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>  <span class="at">P4 =</span> <span class="st">"Durante el último año, ¿has participado en algún espacio o procedimiento de participación de alguna institución del Estado relacionada con las políticas de juventud? (Por ejemplo, en votaciones o consultas)"</span>,</span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>  <span class="at">P5 =</span> <span class="st">"En general, tú dirías que eres..."</span>,</span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>  <span class="at">P6 =</span> <span class="st">"De 1 a 5, donde 1 es muy insatisfecho/a y 5 es muy satisfecho/a, ¿qué tan satisfecho estás con los siguientes aspectos de tu vida?"</span>,</span>
-<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>  <span class="at">P7 =</span> <span class="st">"¿Qué crees tú que es lo más importante para ser feliz en la vida?"</span>,</span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>  <span class="at">P8 =</span> <span class="st">"Según tu opinión, ¿cuál consideras tú que es la condición más importante para que te vaya bien en la vida?"</span>,</span>
-<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>  <span class="at">P9 =</span> <span class="st">"En términos generales, ¿cómo crees que vas a estar tú en cinco años más, mejor, igual o peor que ahora?"</span>,</span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>  <span class="at">P10 =</span> <span class="st">"¿Y cómo crees que va a estar Chile en 5 años más, mejor, igual o peor que ahora?"</span>,</span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>  <span class="at">P11 =</span> <span class="st">"De 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás con las siguientes iniciativas?"</span>,</span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>  <span class="at">P12 =</span> <span class="st">"De 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes afirmaciones?"</span>,</span>
-<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>  <span class="at">P13 =</span> <span class="st">"¿Asistes actualmente alguna institución de educación básica, media o superior; o en algún programa de nivelación de estudio dirigido a personas que no completaron la enseñanza básica y media?"</span>,</span>
-<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>  <span class="at">P14 =</span> <span class="st">"¿Cuál es tu nivel más alto alcanzado o tu nivel educacional actual?"</span>,</span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>  <span class="at">P15 =</span> <span class="st">"¿En qué tipo de institución realizas o realizaste tu educación superior?"</span>,</span>
-<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>  <span class="at">P16 =</span> <span class="st">"¿A través de qué modalidades pagas o pagaste tu educación?"</span>,</span>
-<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>  <span class="at">P17 =</span> <span class="st">"¿De qué tipo de establecimiento te graduaste de la educación media?"</span>,</span>
-<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">P18 =</span> <span class="st">"¿Cuál es la principal razón por la que NO estás estudiando?"</span>,</span>
-<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>  <span class="at">P19 =</span> <span class="st">"De 1 a 7, donde 1 es pésima y 7 es excelente, ¿cómo consideras que es..."</span>,</span>
-<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>  <span class="at">P20 =</span> <span class="st">"Según tu opinión, ¿cuál es la cosa más importante que puedo lograr en la vida con la educación que recibes o has recibido?"</span>,</span>
-<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">P21 =</span> <span class="st">"Utilizando una escala de 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes afirmaciones?"</span>,</span>
-<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>  <span class="at">P22 =</span> <span class="st">"¿Qué tan interesado/a estás en la política?"</span>,</span>
-<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">P23 =</span> <span class="st">"¿Con cuál de las siguientes frases estás más de acuerdo?"</span>,</span>
-<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a>  <span class="at">P24 =</span> <span class="st">"En tu caso, tú..."</span>,</span>
-<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>  <span class="at">P25 =</span> <span class="st">"En la elección de convencionales constituyentes de mayo de 2021, tú..."</span>,</span>
-<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>  <span class="at">P26 =</span> <span class="st">"¿Con qué sector político te sientes más identificado/a?"</span>,</span>
-<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>  <span class="at">P27 =</span> <span class="st">"De 1 a 5, donde 1 es muy insatisfecho/a y 5 muy satisfecho/a, ¿cuán satisfecho/a estás con la democracia en Chile?"</span>,</span>
-<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>  <span class="at">P28 =</span> <span class="st">"Utilizando una escala de 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás con las siguientes afirmaciones sobre las redes sociales?"</span>,</span>
-<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>  <span class="at">P29 =</span> <span class="st">"Una ley que te parece mala o injusta está a punto de ser aprobada en el congreso, ¿cuál es la principal acción que realizarías para dar a conocer tu opinión frente a las autoridades?"</span>,</span>
-<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>  <span class="at">P30 =</span> <span class="st">"Considerando el contexto de movilizaciones en octubre de 2019, ¿realizaste alguna de las siguientes acciones?"</span>,</span>
-<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>  <span class="at">P31 =</span> <span class="st">"¿Te has sentido discriminado/a alguna vez EN LA VIDA por las siguientes personas?"</span>,</span>
-<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a>  <span class="at">P32 =</span> <span class="st">"¿En el ÚLTIMO mes te has sentido discriminado/a por alguna de las siguientes razones?"</span>,</span>
-<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>  <span class="at">P33 =</span> <span class="st">"Utilizando una escala de 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo o en desacuerdo estás tú con las siguientes afirmaciones sobre la población inmigrante que reside en el país?"</span>,</span>
-<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>  <span class="at">P34 =</span> <span class="st">"¿Cuál crees tú que es el grupo de personas que sufre MÁS discriminación en nuestro país?"</span>,</span>
-<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>  <span class="at">P35 =</span> <span class="st">"De 1 a 7, donde 1 es pésima y 7 es excelente, ¿cómo evalúas las oportunidades para conseguir un buen trabajo hoy para una persona joven como tú en Chile?"</span>,</span>
-<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>  <span class="at">P36 =</span> <span class="st">"Aunque no trabajaste la semana pasada, ¿trabajaste al menos una hora sin considerar los quehaceres de su hogar?"</span>,</span>
-<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>  <span class="at">P37 =</span> <span class="st">"Aunque no trabajaste la semana pasada, ¿realizaste alguna actividad por lo menos durante una hora?"</span>,</span>
-<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a>  <span class="at">P38 =</span> <span class="st">"Aunque no trabajaste la semana pasada, ¿tenías algún empleo, negocio o actividad del cual estuviste ausente temporalmente por licencia, huelga, vacaciones u otra razón?"</span>,</span>
-<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">P39 =</span> <span class="st">"¿Has trabajado alguna vez en la vida?"</span>,</span>
-<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>  <span class="at">P40 =</span> <span class="st">"¿Buscaste trabajo remunerado o realizaste alguna gestión para iniciar una actividad por cuenta propia?"</span>,</span>
-<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">P41 =</span> <span class="st">"¿Cuál es la principal razón por la que NO buscas trabajo o realizaste alguna gestión para iniciar una actividad por cuenta propia (negocio o empresa), en las últimas 4 semanas?"</span>,</span>
-<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">P42 =</span> <span class="st">"¿Bajo qué condición estarías dispuesto/a a volver a buscar trabajo?"</span>,</span>
-<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">P43 =</span> <span class="st">"¿Cuánto tiempo buscaste o has estado buscando empleo?"</span>,</span>
-<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>  <span class="at">P44 =</span> <span class="st">"¿Cuál es la principal razón para trabajar o estar buscando trabajo?"</span>,</span>
-<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>  <span class="at">P45 =</span> <span class="st">"Habitualmente, ¿cuántas horas trabajas en la semana en tu trabajo, negocio o actividad principal?"</span>,</span>
-<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>  <span class="at">P46 =</span> <span class="st">"¿Y estarías dispuesto/a a trabajar más horas a la semana?"</span>,</span>
-<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>  <span class="at">P47 =</span> <span class="st">"¿Cuál es la principal razón por la que tienes este tipo de jornada laboral?"</span>,</span>
-<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>  <span class="at">P48 =</span> <span class="st">"Y en tu empleo, tú trabajas como..."</span>,</span>
-<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a>  <span class="at">P49 =</span> <span class="st">"¿Qué tipo de contrato escrito tienes en tu principal trabajo?"</span>,</span>
-<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>  <span class="at">P50 =</span> <span class="st">"Siendo 1 muy insatisfecho/a y 5 muy satisfecho/a, ¿cuán satisfecho/a te sientes con cada uno de los siguientes aspectos de tu trabajo?"</span>,</span>
-<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>  <span class="at">P51 =</span> <span class="st">"¿Cotizaste durante el mes pasado en algún sistema previsional o de pensiones como, AFP, DIPRECA o CAPREDENA?"</span>,</span>
-<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">P52 =</span> <span class="st">"¿Cuál es la principal razón por la que no cotizaste el mes pasado en algún sistema previsional o de pensiones como, AFP, DIPRECA, CAPREDENA?"</span>,</span>
-<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>  <span class="at">P53 =</span> <span class="st">"¿Cuál es tu situación de pareja actual?"</span>,</span>
-<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a>  <span class="at">P54 =</span> <span class="st">"¿Cuántos hijos/as tienes?"</span>,</span>
-<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>  <span class="at">P55 =</span> <span class="st">"¿Qué edad tiene el o la mayor?"</span>,</span>
-<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>  <span class="at">P56 =</span> <span class="st">"¿Cuántos hijos/as quieres tener en total?"</span>,</span>
-<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>  <span class="at">P57 =</span> <span class="st">"¿Dónde vives habitualmente la mayor parte del año?"</span>,</span>
-<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a>  <span class="at">P58 =</span> <span class="st">"¿Con quién vives la mayor parte del año?, ¿con quién más?"</span>,</span>
-<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a>  <span class="at">P59 =</span> <span class="st">"Considerando el mes anterior, ¿de dónde provienen tus ingresos?"</span>,</span>
-<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>  <span class="at">P60 =</span> <span class="st">"En un mes normal, ¿el o los ingresos que recibes te permiten cubrir las siguientes necesidades?"</span>,</span>
-<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>  <span class="at">P61 =</span> <span class="st">"Piense sólo en las deudas que están a TU NOMBRE, ¿tienes deudas, ya sea vencidas o al día, en...?"</span>,</span>
-<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>  <span class="at">P62 =</span> <span class="st">"¿Te sientes una persona endeudada?"</span>,</span>
-<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>  <span class="at">P63 =</span> <span class="st">"¿Cuál es tu nacionalidad?"</span>,</span>
-<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>  <span class="at">P64 =</span> <span class="st">"Cuando naciste, ¿en qué comuna o país vivía tu madre?"</span>,</span>
-<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a>  <span class="at">P65 =</span> <span class="st">"¿En qué año llegaste al país?"</span>,</span>
-<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a>  <span class="at">P66 =</span> <span class="st">"¿Te identificas con alguna religión?"</span>,</span>
-<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>  <span class="at">P67 =</span> <span class="st">"¿Tienes tú algunas de las siguientes condiciones permanentes y/o de larga duración?"</span>,</span>
-<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a>  <span class="at">P68 =</span> <span class="st">"¿Perteneces o desciendes de algún pueblo originario?"</span>,</span>
-<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>  <span class="at">P69 =</span> <span class="st">"¿Cuál es tu sistema de salud?"</span>,</span>
-<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a>  <span class="at">P70 =</span> <span class="st">"¿Tú eres el jefe(a) de tu hogar o principal sostenedor(a)?"</span>,</span>
-<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a>  <span class="at">P71 =</span> <span class="st">"¿Cuál es tu actividad o trabajo?"</span>,</span>
-<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a>  <span class="at">P72 =</span> <span class="st">"¿Cuál es la actividad o trabajo del jefe de su hogar, o la que realizaba cuando trabajaba (EN CASO DE JUBILADOS)?"</span>,</span>
-<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>  <span class="at">P73 =</span> <span class="st">"¿Y cuál es tu ocupación principal?"</span>,</span>
-<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a>  <span class="at">P74 =</span> <span class="st">"¿Cuál es tu nivel de estudios alcanzado?"</span>,</span>
-<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a>  <span class="at">P75 =</span> <span class="st">"¿Y cuál es el nivel de estudios que alcanzó el o la jefa/a de su hogar?"</span>,</span>
-<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a>  <span class="at">P76 =</span> <span class="st">"SIGAMOS, ¿Y en los últimos 12 MESES, has consumido las siguientes sustancias...?"</span>,</span>
-<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a>  <span class="at">P77 =</span> <span class="st">"De la siguiente lista, ¿podrías indicar cada cuánto tiempo consumes...?"</span>,</span>
-<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a>  <span class="at">P78 =</span> <span class="st">"¿Te has iniciado sexualmente, es decir, has tenido relaciones sexuales con penetración?"</span>,</span>
-<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a>  <span class="at">P79 =</span> <span class="st">"¿Cuál es tu orientación sexual?"</span>,</span>
-<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a>  <span class="at">P80 =</span> <span class="st">"En cuanto a tu género, tú te identificas como..."</span>,</span>
-<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a>  <span class="at">P81 =</span> <span class="st">"¿A qué edad tuviste tu primera relación sexual?"</span>,</span>
-<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">P82 =</span> <span class="st">"¿Con cuántas personas has tenido relaciones sexuales en los últimos doce meses?"</span>,</span>
-<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a>  <span class="at">P83 =</span> <span class="st">"¿Con quién tuviste tu PRIMERA relación sexual?"</span>,</span>
-<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a>  <span class="at">P84 =</span> <span class="st">"¿Qué método(s) anticonceptivo(s) usaste tú o tu pareja sexual en tu PRIMERA relación sexual?"</span>,</span>
-<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a>  <span class="at">P85 =</span> <span class="st">"¿Con quién tuviste tu última relación sexual?"</span>,</span>
-<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a>  <span class="at">P86 =</span> <span class="st">"¿Qué método(s) anticonceptivo(s) usaste tú o tu pareja sexual en tu última relación sexual?"</span>,</span>
-<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a>  <span class="at">P87 =</span> <span class="st">"En tu última relación sexual, ¿Por qué razón o razones no usaste algún método anticonceptivo o de protección/prevención?"</span>,</span>
-<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a>  <span class="at">P88 =</span> <span class="st">"En tu última relación sexual, ¿Por qué razón o razones se usó condón?"</span>,</span>
-<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a>  <span class="at">P89 =</span> <span class="st">"¿Te ha tocado vivir un embarazo no planificado?"</span>,</span>
-<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a>  <span class="at">P90 =</span> <span class="st">"¿Qué edad tenías tú cuando te tocó vivir a ti o tu pareja sexual un embarazo no planificado?"</span>,</span>
-<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a>  <span class="at">P91 =</span> <span class="st">"¿Te has hecho o inducido algún aborto?"</span>,</span>
-<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a>  <span class="at">P92 =</span> <span class="st">"¿Qué edad tenías tú cuando te hiciste o indujiste un aborto?"</span>,</span>
-<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a>  <span class="at">P93 =</span> <span class="st">"Y este aborto, ¿fue realizado bajo alguna de las tres causales reconocidas por la ley?"</span>,</span>
-<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a>  <span class="at">P94 =</span> <span class="st">"¿Estarías dispuesta a que tú o tu pareja se realizaran o indujeran un aborto?"</span>,</span>
-<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a>  <span class="at">P95 =</span> <span class="st">"Indica si tú crees que el VIH se puede transmitir con cada una de las siguientes prácticas"</span>,</span>
-<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a>  <span class="at">P96 =</span> <span class="st">"¿Te has realizado alguna vez el test del VIH (para prevención de SIDA)?"</span>,</span>
-<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a>  <span class="at">P97 =</span> <span class="st">"¿Cuál es la principal razón por la que te lo realizaste?"</span>,</span>
-<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a>  <span class="at">P98 =</span> <span class="st">"¿Cuál es la principal razón por la que NO te hiciste el test del VIH (para prevención del SIDA)?"</span>,</span>
-<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a>  <span class="at">P99 =</span> <span class="st">"¿Has sido alguna vez diagnosticado con una infección de transmisión sexual (ITS)?"</span>,</span>
-<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a>  <span class="at">P100 =</span> <span class="st">"¿Has practicado alguna vez sexo oral?"</span>,</span>
-<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a>  <span class="at">P101 =</span> <span class="st">"¿Has practicado alguna vez sexo anal?"</span>,</span>
-<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a>  <span class="at">P102 =</span> <span class="st">"¿Con qué frecuencia durante las últimas dos semanas has sentido alguna de las siguientes molestias?"</span>,</span>
-<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a>  <span class="at">P103 =</span> <span class="st">"¿Recibes actualmente algún tratamiento para algún problema de salud mental, como depresión, ansiedad u otro?"</span>,</span>
-<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a>  <span class="at">P104 =</span> <span class="st">"¿Cuál fue el diagnóstico por el que recibes este tipo de tratamiento?"</span>,</span>
-<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a>  <span class="at">P105 =</span> <span class="st">"Si quisieras o necesitaras recibir atención profesional, ¿qué tan posible sería para ti o tu familia costear esa atención por un período prolongado de tiempo...?"</span>,</span>
-<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a>  <span class="at">P106 =</span> <span class="st">"¿Has sido víctima de violencia física en alguna de estas situaciones?"</span>,</span>
-<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a>  <span class="at">P107 =</span> <span class="st">"¿Has sido víctima de violencia psicológica en alguna de estas situaciones?"</span>,</span>
-<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a>  <span class="at">P108 =</span> <span class="st">"Aunque sea solo una vez, ¿se ha dado alguna de las siguientes situaciones en tu relación de pareja actual?"</span>,</span>
-<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a>  <span class="at">P109 =</span> <span class="st">"Por favor responde sí o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo"</span>,</span>
-<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a>  <span class="at">P110 =</span> <span class="st">"Por favor responde sí o no a las siguientes preguntas respecto a tu comportamiento con tu pareja"</span>,</span>
-<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a>  <span class="at">P111 =</span> <span class="st">"¿En los últimos 12 meses has sufrido alguno de los siguientes tipos de cyberbullying o acoso cibernético?"</span>,</span>
-<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a>  <span class="at">P112 =</span> <span class="st">"¿En los últimos 12 meses has realizado alguno de los siguientes tipos de cyberbullying o acoso cibernético?"</span></span>
-<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterar sobre todas las columnas y aplicar las nuevas etiquetas en BBDD JÓVENES 2022</span></span>
-<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (col <span class="cf">in</span> <span class="fu">colnames</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2022</span><span class="st">`</span>)) {</span>
-<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a>  prefix <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"(P</span><span class="sc">\\</span><span class="st">d+).*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, col)  <span class="co"># Extrae el prefijo de la columna</span></span>
-<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (prefix <span class="sc">%in%</span> <span class="fu">names</span>(preguntas_encabezados_2022)) {</span>
-<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a>    current_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.null</span>(<span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2022</span><span class="st">`</span>[[col]])), <span class="st">""</span>, <span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2022</span><span class="st">`</span>[[col]]))</span>
-<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Eliminar cualquier número y punto al inicio, así como cualquier guion bajo</span></span>
-<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a>    cleaned_label <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^(P</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">s*)|(_</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">s*)"</span>, <span class="st">""</span>, current_label)</span>
-<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a>    new_label <span class="ot">&lt;-</span> <span class="fu">paste0</span>(col, <span class="st">". "</span>, preguntas_encabezados_2022[prefix], <span class="st">" "</span>, cleaned_label)</span>
-<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a>    <span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2022</span><span class="st">`</span>[[col]]) <span class="ot">&lt;-</span> new_label</span>
-<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-226"><a href="#cb3-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-227"><a href="#cb3-227" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2012</span><span class="st">`</span>, label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">P129 =</span> <span class="st">"¿Qué edad tenías tú cuando te tocó vivir a ti o tu pareja un embarazo no planificado?"</span>,</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">P149 =</span> <span class="st">"Aunque sea solo una vez, ¿se ha dado alguna de las siguientes situaciones en tu relación de pareja actual?"</span>,</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">P150 =</span> <span class="st">"Por favor responde si o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo"</span>,</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">P151 =</span> <span class="st">"Por favor responde si o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo"</span></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (col <span class="cf">in</span> <span class="fu">colnames</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2018</span><span class="st">`</span>)) {</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>  prefix <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"(P</span><span class="sc">\\</span><span class="st">d+).*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, col)</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (prefix <span class="sc">%in%</span> <span class="fu">names</span>(preguntas_encabezados_2018)) {</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    current_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.null</span>(<span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2018</span><span class="st">`</span>[[col]])), <span class="st">""</span>, <span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2018</span><span class="st">`</span>[[col]]))</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>    cleaned_label <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^(P</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">s*)|(_</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">s*)"</span>, <span class="st">""</span>, current_label)</span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>    new_label <span class="ot">&lt;-</span> <span class="fu">paste0</span>(col, <span class="st">". "</span>, preguntas_encabezados_2018[prefix], <span class="st">" "</span>, cleaned_label)</span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>    <span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2018</span><span class="st">`</span>[[col]]) <span class="ot">&lt;-</span> new_label</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>preguntas_encabezados_2022 <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">P1 =</span> <span class="st">"En los últimos 12 meses, es decir, desde (xxx) hasta hoy, ¿has participado activamente en alguna de las siguientes organizaciones o grupo organizado?"</span>,</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>  <span class="at">P2 =</span> <span class="st">"¿Y participaste con algún cargo de dirigente u organizador/a?"</span>,</span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>  <span class="at">P3 =</span> <span class="st">"En los últimos 12 meses, es decir, desde (xxx), hasta hoy, ¿cuáles de las siguientes actividades de ayuda a la comunidad o trabajo de voluntariado NO REMUNERADO has realizado?"</span>,</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>  <span class="at">P4 =</span> <span class="st">"Durante el último año, ¿has participado en algún espacio o procedimiento de participación de alguna institución del Estado relacionada con las políticas de juventud? (Por ejemplo, en votaciones o consultas)"</span>,</span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>  <span class="at">P5 =</span> <span class="st">"En general, tú dirías que eres..."</span>,</span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">P6 =</span> <span class="st">"De 1 a 5, donde 1 es muy insatisfecho/a y 5 es muy satisfecho/a, ¿qué tan satisfecho estás con los siguientes aspectos de tu vida?"</span>,</span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>  <span class="at">P7 =</span> <span class="st">"¿Qué crees tú que es lo más importante para ser feliz en la vida?"</span>,</span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>  <span class="at">P8 =</span> <span class="st">"Según tu opinión, ¿cuál consideras tú que es la condición más importante para que te vaya bien en la vida?"</span>,</span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>  <span class="at">P9 =</span> <span class="st">"En términos generales, ¿cómo crees que vas a estar tú en cinco años más, mejor, igual o peor que ahora?"</span>,</span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>  <span class="at">P10 =</span> <span class="st">"¿Y cómo crees que va a estar Chile en 5 años más, mejor, igual o peor que ahora?"</span>,</span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>  <span class="at">P11 =</span> <span class="st">"De 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás con las siguientes iniciativas?"</span>,</span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>  <span class="at">P12 =</span> <span class="st">"De 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes afirmaciones?"</span>,</span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>  <span class="at">P13 =</span> <span class="st">"¿Asistes actualmente alguna institución de educación básica, media o superior; o en algún programa de nivelación de estudio dirigido a personas que no completaron la enseñanza básica y media?"</span>,</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>  <span class="at">P14 =</span> <span class="st">"¿Cuál es tu nivel más alto alcanzado o tu nivel educacional actual?"</span>,</span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>  <span class="at">P15 =</span> <span class="st">"¿En qué tipo de institución realizas o realizaste tu educación superior?"</span>,</span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>  <span class="at">P16 =</span> <span class="st">"¿A través de qué modalidades pagas o pagaste tu educación?"</span>,</span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>  <span class="at">P17 =</span> <span class="st">"¿De qué tipo de establecimiento te graduaste de la educación media?"</span>,</span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>  <span class="at">P18 =</span> <span class="st">"¿Cuál es la principal razón por la que NO estás estudiando?"</span>,</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>  <span class="at">P19 =</span> <span class="st">"De 1 a 7, donde 1 es pésima y 7 es excelente, ¿cómo consideras que es..."</span>,</span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>  <span class="at">P20 =</span> <span class="st">"Según tu opinión, ¿cuál es la cosa más importante que puedo lograr en la vida con la educación que recibes o has recibido?"</span>,</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>  <span class="at">P21 =</span> <span class="st">"Utilizando una escala de 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes afirmaciones?"</span>,</span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">P22 =</span> <span class="st">"¿Qué tan interesado/a estás en la política?"</span>,</span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>  <span class="at">P23 =</span> <span class="st">"¿Con cuál de las siguientes frases estás más de acuerdo?"</span>,</span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>  <span class="at">P24 =</span> <span class="st">"En tu caso, tú..."</span>,</span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">P25 =</span> <span class="st">"En la elección de convencionales constituyentes de mayo de 2021, tú..."</span>,</span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>  <span class="at">P26 =</span> <span class="st">"¿Con qué sector político te sientes más identificado/a?"</span>,</span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">P27 =</span> <span class="st">"De 1 a 5, donde 1 es muy insatisfecho/a y 5 muy satisfecho/a, ¿cuán satisfecho/a estás con la democracia en Chile?"</span>,</span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a>  <span class="at">P28 =</span> <span class="st">"Utilizando una escala de 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás con las siguientes afirmaciones sobre las redes sociales?"</span>,</span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>  <span class="at">P29 =</span> <span class="st">"Una ley que te parece mala o injusta está a punto de ser aprobada en el congreso, ¿cuál es la principal acción que realizarías para dar a conocer tu opinión frente a las autoridades?"</span>,</span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>  <span class="at">P30 =</span> <span class="st">"Considerando el contexto de movilizaciones en octubre de 2019, ¿realizaste alguna de las siguientes acciones?"</span>,</span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>  <span class="at">P31 =</span> <span class="st">"¿Te has sentido discriminado/a alguna vez EN LA VIDA por las siguientes personas?"</span>,</span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>  <span class="at">P32 =</span> <span class="st">"¿En el ÚLTIMO mes te has sentido discriminado/a por alguna de las siguientes razones?"</span>,</span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>  <span class="at">P33 =</span> <span class="st">"Utilizando una escala de 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo o en desacuerdo estás tú con las siguientes afirmaciones sobre la población inmigrante que reside en el país?"</span>,</span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>  <span class="at">P34 =</span> <span class="st">"¿Cuál crees tú que es el grupo de personas que sufre MÁS discriminación en nuestro país?"</span>,</span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>  <span class="at">P35 =</span> <span class="st">"De 1 a 7, donde 1 es pésima y 7 es excelente, ¿cómo evalúas las oportunidades para conseguir un buen trabajo hoy para una persona joven como tú en Chile?"</span>,</span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a>  <span class="at">P36 =</span> <span class="st">"Aunque no trabajaste la semana pasada, ¿trabajaste al menos una hora sin considerar los quehaceres de su hogar?"</span>,</span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>  <span class="at">P37 =</span> <span class="st">"Aunque no trabajaste la semana pasada, ¿realizaste alguna actividad por lo menos durante una hora?"</span>,</span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>  <span class="at">P38 =</span> <span class="st">"Aunque no trabajaste la semana pasada, ¿tenías algún empleo, negocio o actividad del cual estuviste ausente temporalmente por licencia, huelga, vacaciones u otra razón?"</span>,</span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>  <span class="at">P39 =</span> <span class="st">"¿Has trabajado alguna vez en la vida?"</span>,</span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>  <span class="at">P40 =</span> <span class="st">"¿Buscaste trabajo remunerado o realizaste alguna gestión para iniciar una actividad por cuenta propia?"</span>,</span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>  <span class="at">P41 =</span> <span class="st">"¿Cuál es la principal razón por la que NO buscas trabajo o realizaste alguna gestión para iniciar una actividad por cuenta propia (negocio o empresa), en las últimas 4 semanas?"</span>,</span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a>  <span class="at">P42 =</span> <span class="st">"¿Bajo qué condición estarías dispuesto/a a volver a buscar trabajo?"</span>,</span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">P43 =</span> <span class="st">"¿Cuánto tiempo buscaste o has estado buscando empleo?"</span>,</span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>  <span class="at">P44 =</span> <span class="st">"¿Cuál es la principal razón para trabajar o estar buscando trabajo?"</span>,</span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">P45 =</span> <span class="st">"Habitualmente, ¿cuántas horas trabajas en la semana en tu trabajo, negocio o actividad principal?"</span>,</span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">P46 =</span> <span class="st">"¿Y estarías dispuesto/a a trabajar más horas a la semana?"</span>,</span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">P47 =</span> <span class="st">"¿Cuál es la principal razón por la que tienes este tipo de jornada laboral?"</span>,</span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>  <span class="at">P48 =</span> <span class="st">"Y en tu empleo, tú trabajas como..."</span>,</span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>  <span class="at">P49 =</span> <span class="st">"¿Qué tipo de contrato escrito tienes en tu principal trabajo?"</span>,</span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>  <span class="at">P50 =</span> <span class="st">"Siendo 1 muy insatisfecho/a y 5 muy satisfecho/a, ¿cuán satisfecho/a te sientes con cada uno de los siguientes aspectos de tu trabajo?"</span>,</span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>  <span class="at">P51 =</span> <span class="st">"¿Cotizaste durante el mes pasado en algún sistema previsional o de pensiones como, AFP, DIPRECA o CAPREDENA?"</span>,</span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>  <span class="at">P52 =</span> <span class="st">"¿Cuál es la principal razón por la que no cotizaste el mes pasado en algún sistema previsional o de pensiones como, AFP, DIPRECA, CAPREDENA?"</span>,</span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a>  <span class="at">P53 =</span> <span class="st">"¿Cuál es tu situación de pareja actual?"</span>,</span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>  <span class="at">P54 =</span> <span class="st">"¿Cuántos hijos/as tienes?"</span>,</span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>  <span class="at">P55 =</span> <span class="st">"¿Qué edad tiene el o la mayor?"</span>,</span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">P56 =</span> <span class="st">"¿Cuántos hijos/as quieres tener en total?"</span>,</span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>  <span class="at">P57 =</span> <span class="st">"¿Dónde vives habitualmente la mayor parte del año?"</span>,</span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a>  <span class="at">P58 =</span> <span class="st">"¿Con quién vives la mayor parte del año?, ¿con quién más?"</span>,</span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>  <span class="at">P59 =</span> <span class="st">"Considerando el mes anterior, ¿de dónde provienen tus ingresos?"</span>,</span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>  <span class="at">P60 =</span> <span class="st">"En un mes normal, ¿el o los ingresos que recibes te permiten cubrir las siguientes necesidades?"</span>,</span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>  <span class="at">P61 =</span> <span class="st">"Piense sólo en las deudas que están a TU NOMBRE, ¿tienes deudas, ya sea vencidas o al día, en...?"</span>,</span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a>  <span class="at">P62 =</span> <span class="st">"¿Te sientes una persona endeudada?"</span>,</span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a>  <span class="at">P63 =</span> <span class="st">"¿Cuál es tu nacionalidad?"</span>,</span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>  <span class="at">P64 =</span> <span class="st">"Cuando naciste, ¿en qué comuna o país vivía tu madre?"</span>,</span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>  <span class="at">P65 =</span> <span class="st">"¿En qué año llegaste al país?"</span>,</span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>  <span class="at">P66 =</span> <span class="st">"¿Te identificas con alguna religión?"</span>,</span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>  <span class="at">P67 =</span> <span class="st">"¿Tienes tú algunas de las siguientes condiciones permanentes y/o de larga duración?"</span>,</span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>  <span class="at">P68 =</span> <span class="st">"¿Perteneces o desciendes de algún pueblo originario?"</span>,</span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a>  <span class="at">P69 =</span> <span class="st">"¿Cuál es tu sistema de salud?"</span>,</span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a>  <span class="at">P70 =</span> <span class="st">"¿Tú eres el jefe(a) de tu hogar o principal sostenedor(a)?"</span>,</span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>  <span class="at">P71 =</span> <span class="st">"¿Cuál es tu actividad o trabajo?"</span>,</span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a>  <span class="at">P72 =</span> <span class="st">"¿Cuál es la actividad o trabajo del jefe de su hogar, o la que realizaba cuando trabajaba (EN CASO DE JUBILADOS)?"</span>,</span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>  <span class="at">P73 =</span> <span class="st">"¿Y cuál es tu ocupación principal?"</span>,</span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a>  <span class="at">P74 =</span> <span class="st">"¿Cuál es tu nivel de estudios alcanzado?"</span>,</span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a>  <span class="at">P75 =</span> <span class="st">"¿Y cuál es el nivel de estudios que alcanzó el o la jefa/a de su hogar?"</span>,</span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a>  <span class="at">P76 =</span> <span class="st">"SIGAMOS, ¿Y en los últimos 12 MESES, has consumido las siguientes sustancias...?"</span>,</span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>  <span class="at">P77 =</span> <span class="st">"De la siguiente lista, ¿podrías indicar cada cuánto tiempo consumes...?"</span>,</span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a>  <span class="at">P78 =</span> <span class="st">"¿Te has iniciado sexualmente, es decir, has tenido relaciones sexuales con penetración?"</span>,</span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a>  <span class="at">P79 =</span> <span class="st">"¿Cuál es tu orientación sexual?"</span>,</span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a>  <span class="at">P80 =</span> <span class="st">"En cuanto a tu género, tú te identificas como..."</span>,</span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a>  <span class="at">P81 =</span> <span class="st">"¿A qué edad tuviste tu primera relación sexual?"</span>,</span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a>  <span class="at">P82 =</span> <span class="st">"¿Con cuántas personas has tenido relaciones sexuales en los últimos doce meses?"</span>,</span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a>  <span class="at">P83 =</span> <span class="st">"¿Con quién tuviste tu PRIMERA relación sexual?"</span>,</span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a>  <span class="at">P84 =</span> <span class="st">"¿Qué método(s) anticonceptivo(s) usaste tú o tu pareja sexual en tu PRIMERA relación sexual?"</span>,</span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a>  <span class="at">P85 =</span> <span class="st">"¿Con quién tuviste tu última relación sexual?"</span>,</span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">P86 =</span> <span class="st">"¿Qué método(s) anticonceptivo(s) usaste tú o tu pareja sexual en tu última relación sexual?"</span>,</span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a>  <span class="at">P87 =</span> <span class="st">"En tu última relación sexual, ¿Por qué razón o razones no usaste algún método anticonceptivo o de protección/prevención?"</span>,</span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a>  <span class="at">P88 =</span> <span class="st">"En tu última relación sexual, ¿Por qué razón o razones se usó condón?"</span>,</span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a>  <span class="at">P89 =</span> <span class="st">"¿Te ha tocado vivir un embarazo no planificado?"</span>,</span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a>  <span class="at">P90 =</span> <span class="st">"¿Qué edad tenías tú cuando te tocó vivir a ti o tu pareja sexual un embarazo no planificado?"</span>,</span>
+<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a>  <span class="at">P91 =</span> <span class="st">"¿Te has hecho o inducido algún aborto?"</span>,</span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a>  <span class="at">P92 =</span> <span class="st">"¿Qué edad tenías tú cuando te hiciste o indujiste un aborto?"</span>,</span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a>  <span class="at">P93 =</span> <span class="st">"Y este aborto, ¿fue realizado bajo alguna de las tres causales reconocidas por la ley?"</span>,</span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a>  <span class="at">P94 =</span> <span class="st">"¿Estarías dispuesta a que tú o tu pareja se realizaran o indujeran un aborto?"</span>,</span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a>  <span class="at">P95 =</span> <span class="st">"Indica si tú crees que el VIH se puede transmitir con cada una de las siguientes prácticas"</span>,</span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a>  <span class="at">P96 =</span> <span class="st">"¿Te has realizado alguna vez el test del VIH (para prevención de SIDA)?"</span>,</span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a>  <span class="at">P97 =</span> <span class="st">"¿Cuál es la principal razón por la que te lo realizaste?"</span>,</span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a>  <span class="at">P98 =</span> <span class="st">"¿Cuál es la principal razón por la que NO te hiciste el test del VIH (para prevención del SIDA)?"</span>,</span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a>  <span class="at">P99 =</span> <span class="st">"¿Has sido alguna vez diagnosticado con una infección de transmisión sexual (ITS)?"</span>,</span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a>  <span class="at">P100 =</span> <span class="st">"¿Has practicado alguna vez sexo oral?"</span>,</span>
+<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a>  <span class="at">P101 =</span> <span class="st">"¿Has practicado alguna vez sexo anal?"</span>,</span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a>  <span class="at">P102 =</span> <span class="st">"¿Con qué frecuencia durante las últimas dos semanas has sentido alguna de las siguientes molestias?"</span>,</span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a>  <span class="at">P103 =</span> <span class="st">"¿Recibes actualmente algún tratamiento para algún problema de salud mental, como depresión, ansiedad u otro?"</span>,</span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a>  <span class="at">P104 =</span> <span class="st">"¿Cuál fue el diagnóstico por el que recibes este tipo de tratamiento?"</span>,</span>
+<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a>  <span class="at">P105 =</span> <span class="st">"Si quisieras o necesitaras recibir atención profesional, ¿qué tan posible sería para ti o tu familia costear esa atención por un período prolongado de tiempo...?"</span>,</span>
+<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a>  <span class="at">P106 =</span> <span class="st">"¿Has sido víctima de violencia física en alguna de estas situaciones?"</span>,</span>
+<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a>  <span class="at">P107 =</span> <span class="st">"¿Has sido víctima de violencia psicológica en alguna de estas situaciones?"</span>,</span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a>  <span class="at">P108 =</span> <span class="st">"Aunque sea solo una vez, ¿se ha dado alguna de las siguientes situaciones en tu relación de pareja actual?"</span>,</span>
+<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a>  <span class="at">P109 =</span> <span class="st">"Por favor responde sí o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo"</span>,</span>
+<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a>  <span class="at">P110 =</span> <span class="st">"Por favor responde sí o no a las siguientes preguntas respecto a tu comportamiento con tu pareja"</span>,</span>
+<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a>  <span class="at">P111 =</span> <span class="st">"¿En los últimos 12 meses has sufrido alguno de los siguientes tipos de cyberbullying o acoso cibernético?"</span>,</span>
+<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a>  <span class="at">P112 =</span> <span class="st">"¿En los últimos 12 meses has realizado alguno de los siguientes tipos de cyberbullying o acoso cibernético?"</span></span>
+<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterar sobre todas las columnas y aplicar las nuevas etiquetas en BBDD JÓVENES 2022</span></span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (col <span class="cf">in</span> <span class="fu">colnames</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2022</span><span class="st">`</span>)) {</span>
+<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a>  prefix <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"(P</span><span class="sc">\\</span><span class="st">d+).*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, col)  <span class="co"># Extrae el prefijo de la columna</span></span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (prefix <span class="sc">%in%</span> <span class="fu">names</span>(preguntas_encabezados_2022)) {</span>
+<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a>    current_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.null</span>(<span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2022</span><span class="st">`</span>[[col]])), <span class="st">""</span>, <span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2022</span><span class="st">`</span>[[col]]))</span>
+<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Eliminar cualquier número y punto al inicio, así como cualquier guion bajo</span></span>
+<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a>    cleaned_label <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^(P</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">s*)|(_</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">s*)"</span>, <span class="st">""</span>, current_label)</span>
+<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a>    new_label <span class="ot">&lt;-</span> <span class="fu">paste0</span>(col, <span class="st">". "</span>, preguntas_encabezados_2022[prefix], <span class="st">" "</span>, cleaned_label)</span>
+<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a>    <span class="fu">label</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2022</span><span class="st">`</span>[[col]]) <span class="ot">&lt;-</span> new_label</span>
+<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2012</span><span class="st">`</span>, label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>list()</code></pre>
@@ -462,23 +459,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"ENJUV 2015"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="uqsoamgohl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#uqsoamgohl table {
+<div id="kqgkuxdgrp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kqgkuxdgrp table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#uqsoamgohl thead, #uqsoamgohl tbody, #uqsoamgohl tfoot, #uqsoamgohl tr, #uqsoamgohl td, #uqsoamgohl th {
+#kqgkuxdgrp thead, #kqgkuxdgrp tbody, #kqgkuxdgrp tfoot, #kqgkuxdgrp tr, #kqgkuxdgrp td, #kqgkuxdgrp th {
   border-style: none;
 }
 
-#uqsoamgohl p {
+#kqgkuxdgrp p {
   margin: 0;
   padding: 0;
 }
 
-#uqsoamgohl .gt_table {
+#kqgkuxdgrp .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -504,12 +501,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_caption {
+#kqgkuxdgrp .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#uqsoamgohl .gt_title {
+#kqgkuxdgrp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -521,7 +518,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#uqsoamgohl .gt_subtitle {
+#kqgkuxdgrp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -533,7 +530,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#uqsoamgohl .gt_heading {
+#kqgkuxdgrp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -545,13 +542,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_bottom_border {
+#kqgkuxdgrp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_col_headings {
+#kqgkuxdgrp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -566,7 +563,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_col_heading {
+#kqgkuxdgrp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -586,7 +583,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#uqsoamgohl .gt_column_spanner_outer {
+#kqgkuxdgrp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -598,15 +595,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#uqsoamgohl .gt_column_spanner_outer:first-child {
+#kqgkuxdgrp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#uqsoamgohl .gt_column_spanner_outer:last-child {
+#kqgkuxdgrp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#uqsoamgohl .gt_column_spanner {
+#kqgkuxdgrp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -618,11 +615,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#uqsoamgohl .gt_spanner_row {
+#kqgkuxdgrp .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#uqsoamgohl .gt_group_heading {
+#kqgkuxdgrp .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -648,7 +645,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#uqsoamgohl .gt_empty_group_heading {
+#kqgkuxdgrp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -663,15 +660,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#uqsoamgohl .gt_from_md > :first-child {
+#kqgkuxdgrp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#uqsoamgohl .gt_from_md > :last-child {
+#kqgkuxdgrp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#uqsoamgohl .gt_row {
+#kqgkuxdgrp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -690,7 +687,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#uqsoamgohl .gt_stub {
+#kqgkuxdgrp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -703,7 +700,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#uqsoamgohl .gt_stub_row_group {
+#kqgkuxdgrp .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -717,15 +714,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#uqsoamgohl .gt_row_group_first td {
+#kqgkuxdgrp .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#uqsoamgohl .gt_row_group_first th {
+#kqgkuxdgrp .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#uqsoamgohl .gt_summary_row {
+#kqgkuxdgrp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -735,16 +732,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#uqsoamgohl .gt_first_summary_row {
+#kqgkuxdgrp .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_first_summary_row.thick {
+#kqgkuxdgrp .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#uqsoamgohl .gt_last_summary_row {
+#kqgkuxdgrp .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -754,7 +751,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_grand_summary_row {
+#kqgkuxdgrp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -764,7 +761,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#uqsoamgohl .gt_first_grand_summary_row {
+#kqgkuxdgrp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -774,7 +771,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_last_grand_summary_row_top {
+#kqgkuxdgrp .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -784,11 +781,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_striped {
+#kqgkuxdgrp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#uqsoamgohl .gt_table_body {
+#kqgkuxdgrp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -797,7 +794,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_footnotes {
+#kqgkuxdgrp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -811,7 +808,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_footnote {
+#kqgkuxdgrp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -820,7 +817,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#uqsoamgohl .gt_sourcenotes {
+#kqgkuxdgrp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -834,7 +831,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#uqsoamgohl .gt_sourcenote {
+#kqgkuxdgrp .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -842,63 +839,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#uqsoamgohl .gt_left {
+#kqgkuxdgrp .gt_left {
   text-align: left;
 }
 
-#uqsoamgohl .gt_center {
+#kqgkuxdgrp .gt_center {
   text-align: center;
 }
 
-#uqsoamgohl .gt_right {
+#kqgkuxdgrp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#uqsoamgohl .gt_font_normal {
+#kqgkuxdgrp .gt_font_normal {
   font-weight: normal;
 }
 
-#uqsoamgohl .gt_font_bold {
+#kqgkuxdgrp .gt_font_bold {
   font-weight: bold;
 }
 
-#uqsoamgohl .gt_font_italic {
+#kqgkuxdgrp .gt_font_italic {
   font-style: italic;
 }
 
-#uqsoamgohl .gt_super {
+#kqgkuxdgrp .gt_super {
   font-size: 65%;
 }
 
-#uqsoamgohl .gt_footnote_marks {
+#kqgkuxdgrp .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#uqsoamgohl .gt_asterisk {
+#kqgkuxdgrp .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#uqsoamgohl .gt_indent_1 {
+#kqgkuxdgrp .gt_indent_1 {
   text-indent: 5px;
 }
 
-#uqsoamgohl .gt_indent_2 {
+#kqgkuxdgrp .gt_indent_2 {
   text-indent: 10px;
 }
 
-#uqsoamgohl .gt_indent_3 {
+#kqgkuxdgrp .gt_indent_3 {
   text-indent: 15px;
 }
 
-#uqsoamgohl .gt_indent_4 {
+#kqgkuxdgrp .gt_indent_4 {
   text-indent: 20px;
 }
 
-#uqsoamgohl .gt_indent_5 {
+#kqgkuxdgrp .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -4874,23 +4871,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"ENJUV 2018"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="cwcsonxnnu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#cwcsonxnnu table {
+<div id="czuauesafa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#czuauesafa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cwcsonxnnu thead, #cwcsonxnnu tbody, #cwcsonxnnu tfoot, #cwcsonxnnu tr, #cwcsonxnnu td, #cwcsonxnnu th {
+#czuauesafa thead, #czuauesafa tbody, #czuauesafa tfoot, #czuauesafa tr, #czuauesafa td, #czuauesafa th {
   border-style: none;
 }
 
-#cwcsonxnnu p {
+#czuauesafa p {
   margin: 0;
   padding: 0;
 }
 
-#cwcsonxnnu .gt_table {
+#czuauesafa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -4916,12 +4913,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_caption {
+#czuauesafa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cwcsonxnnu .gt_title {
+#czuauesafa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4933,7 +4930,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#cwcsonxnnu .gt_subtitle {
+#czuauesafa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4945,7 +4942,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#cwcsonxnnu .gt_heading {
+#czuauesafa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4957,13 +4954,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_bottom_border {
+#czuauesafa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_col_headings {
+#czuauesafa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4978,7 +4975,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_col_heading {
+#czuauesafa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4998,7 +4995,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#cwcsonxnnu .gt_column_spanner_outer {
+#czuauesafa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5010,15 +5007,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#cwcsonxnnu .gt_column_spanner_outer:first-child {
+#czuauesafa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cwcsonxnnu .gt_column_spanner_outer:last-child {
+#czuauesafa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cwcsonxnnu .gt_column_spanner {
+#czuauesafa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -5030,11 +5027,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#cwcsonxnnu .gt_spanner_row {
+#czuauesafa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cwcsonxnnu .gt_group_heading {
+#czuauesafa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5060,7 +5057,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#cwcsonxnnu .gt_empty_group_heading {
+#czuauesafa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5075,15 +5072,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#cwcsonxnnu .gt_from_md > :first-child {
+#czuauesafa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cwcsonxnnu .gt_from_md > :last-child {
+#czuauesafa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cwcsonxnnu .gt_row {
+#czuauesafa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5102,7 +5099,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#cwcsonxnnu .gt_stub {
+#czuauesafa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5115,7 +5112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwcsonxnnu .gt_stub_row_group {
+#czuauesafa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5129,15 +5126,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#cwcsonxnnu .gt_row_group_first td {
+#czuauesafa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cwcsonxnnu .gt_row_group_first th {
+#czuauesafa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cwcsonxnnu .gt_summary_row {
+#czuauesafa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5147,16 +5144,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwcsonxnnu .gt_first_summary_row {
+#czuauesafa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_first_summary_row.thick {
+#czuauesafa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cwcsonxnnu .gt_last_summary_row {
+#czuauesafa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5166,7 +5163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_grand_summary_row {
+#czuauesafa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5176,7 +5173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwcsonxnnu .gt_first_grand_summary_row {
+#czuauesafa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5186,7 +5183,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_last_grand_summary_row_top {
+#czuauesafa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5196,11 +5193,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_striped {
+#czuauesafa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cwcsonxnnu .gt_table_body {
+#czuauesafa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5209,7 +5206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_footnotes {
+#czuauesafa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5223,7 +5220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_footnote {
+#czuauesafa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -5232,7 +5229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwcsonxnnu .gt_sourcenotes {
+#czuauesafa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5246,7 +5243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cwcsonxnnu .gt_sourcenote {
+#czuauesafa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -5254,63 +5251,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwcsonxnnu .gt_left {
+#czuauesafa .gt_left {
   text-align: left;
 }
 
-#cwcsonxnnu .gt_center {
+#czuauesafa .gt_center {
   text-align: center;
 }
 
-#cwcsonxnnu .gt_right {
+#czuauesafa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cwcsonxnnu .gt_font_normal {
+#czuauesafa .gt_font_normal {
   font-weight: normal;
 }
 
-#cwcsonxnnu .gt_font_bold {
+#czuauesafa .gt_font_bold {
   font-weight: bold;
 }
 
-#cwcsonxnnu .gt_font_italic {
+#czuauesafa .gt_font_italic {
   font-style: italic;
 }
 
-#cwcsonxnnu .gt_super {
+#czuauesafa .gt_super {
   font-size: 65%;
 }
 
-#cwcsonxnnu .gt_footnote_marks {
+#czuauesafa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cwcsonxnnu .gt_asterisk {
+#czuauesafa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cwcsonxnnu .gt_indent_1 {
+#czuauesafa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cwcsonxnnu .gt_indent_2 {
+#czuauesafa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cwcsonxnnu .gt_indent_3 {
+#czuauesafa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cwcsonxnnu .gt_indent_4 {
+#czuauesafa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cwcsonxnnu .gt_indent_5 {
+#czuauesafa .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -9210,7 +9207,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td class="gt_row gt_right" headers="ID">555</td>
 <td class="gt_row gt_left" headers="column">P128</td>
-<td class="gt_row gt_left" headers="column.label">P128. ¿Te ha tocado vivir un embarazo no planificado? ¿Te ha tocado vivir un embarazo no planificado?</td>
+<td class="gt_row gt_left" headers="column.label">P128. ¿Te ha tocado vivir un embarazo no planificado?</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
@@ -9224,28 +9221,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td class="gt_row gt_right" headers="ID">557</td>
 <td class="gt_row gt_left" headers="column">P130</td>
-<td class="gt_row gt_left" headers="column.label">P130. ¿Te has hecho o inducido algún aborto? ¿Te has hecho o inducido algún aborto?</td>
+<td class="gt_row gt_left" headers="column.label">P130. ¿Te has hecho o inducido algún aborto?</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="ID">558</td>
 <td class="gt_row gt_left" headers="column">P131</td>
-<td class="gt_row gt_left" headers="column.label">P131. Y este aborto, ¿fue realizado bajo alguna causal? Y este aborto, ¿fue realizado bajo alguna causal?</td>
+<td class="gt_row gt_left" headers="column.label">P131. Y este aborto, ¿fue realizado bajo alguna causal?</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Sí, bajo el causal de riesgo vital, Sí, bajo el causal de inviabilidad fetal, Sí, bajo el causal de violación, No, fue por decisión personal, ¿cuál?, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="ID">559</td>
 <td class="gt_row gt_left" headers="column">P131_TEXT</td>
-<td class="gt_row gt_left" headers="column.label">P131_TEXT. Y este aborto, ¿fue realizado bajo alguna causal? _TEXT. Y este aborto, ¿fue realizado bajo alguna causal? [Otro/a]</td>
-<td class="gt_row gt_left" headers="column.class">Labelled</td>
+<td class="gt_row gt_left" headers="column.label">P131_TEXT. Y este aborto, ¿fue realizado bajo alguna causal? [Otro/a]</td>
+<td class="gt_row gt_left" headers="column.class">Character</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="ID">560</td>
 <td class="gt_row gt_left" headers="column">P131_COD</td>
-<td class="gt_row gt_left" headers="column.label">P131_COD. Y este aborto, ¿fue realizado bajo alguna causal? _COD. Y este aborto, ¿fue realizado bajo alguna causal? [Otro/a]</td>
+<td class="gt_row gt_left" headers="column.label">P131_COD. Y este aborto, ¿fue realizado bajo alguna causal? [Otro/a]</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Sí, bajo el causal de riesgo vital, Sí, bajo el causal de inviabilidad fetal, Sí, bajo el causal de violación, No, fue por decisión personal, ¿cuál?, Embarazo no deseado, Era muy joven, No estaba preparada, No quería ser madre, No quería tener otro hijo, Fue un aborto espontáneo, Razones personales, académicas y/o económicas, Por obligación de la pareja o de los padres, NS, NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
@@ -9357,70 +9354,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td class="gt_row gt_right" headers="ID">576</td>
 <td class="gt_row gt_left" headers="column">P138_1</td>
-<td class="gt_row gt_left" headers="column.label">P138_1. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? No, nunca</td>
+<td class="gt_row gt_left" headers="column.label">P138_1. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? No, nunca</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="ID">577</td>
 <td class="gt_row gt_left" headers="column">P138_2</td>
-<td class="gt_row gt_left" headers="column.label">P138_2. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Sífilis</td>
+<td class="gt_row gt_left" headers="column.label">P138_2. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Sífilis</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="ID">578</td>
 <td class="gt_row gt_left" headers="column">P138_3</td>
-<td class="gt_row gt_left" headers="column.label">P138_3. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Gonorrea</td>
+<td class="gt_row gt_left" headers="column.label">P138_3. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Gonorrea</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="ID">579</td>
 <td class="gt_row gt_left" headers="column">P138_4</td>
-<td class="gt_row gt_left" headers="column.label">P138_4. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? VIH positivo o SIDA</td>
+<td class="gt_row gt_left" headers="column.label">P138_4. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? VIH positivo o SIDA</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="ID">580</td>
 <td class="gt_row gt_left" headers="column">P138_5</td>
-<td class="gt_row gt_left" headers="column.label">P138_5. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Herpes Genital</td>
+<td class="gt_row gt_left" headers="column.label">P138_5. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Herpes Genital</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="ID">581</td>
 <td class="gt_row gt_left" headers="column">P138_6</td>
-<td class="gt_row gt_left" headers="column.label">P138_6. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Clamidia</td>
+<td class="gt_row gt_left" headers="column.label">P138_6. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Clamidia</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="ID">582</td>
 <td class="gt_row gt_left" headers="column">P138_7</td>
-<td class="gt_row gt_left" headers="column.label">P138_7. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Virus del papiloma humano (condiloma acuminado)</td>
+<td class="gt_row gt_left" headers="column.label">P138_7. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Virus del papiloma humano (condiloma acuminado)</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="ID">583</td>
 <td class="gt_row gt_left" headers="column">P138_8</td>
-<td class="gt_row gt_left" headers="column.label">P138_8. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Otro</td>
+<td class="gt_row gt_left" headers="column.label">P138_8. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? Otro</td>
 <td class="gt_row gt_left" headers="column.class">Factor (Si, No, NS/NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="ID">584</td>
 <td class="gt_row gt_left" headers="column">P138_TEXT</td>
-<td class="gt_row gt_left" headers="column.label">P138_TEXT. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? _TEXT. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? (Otro, ¿cuál?) [Otro/a]</td>
-<td class="gt_row gt_left" headers="column.class">Labelled</td>
+<td class="gt_row gt_left" headers="column.label">P138_TEXT. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? (Otro, ¿cuál?) [Otro/a]</td>
+<td class="gt_row gt_left" headers="column.class">Character</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="ID">585</td>
 <td class="gt_row gt_left" headers="column">P138_COD</td>
-<td class="gt_row gt_left" headers="column.label">P138_COD. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? _COD. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? (Otro, ¿cuál?) [Otro/a]</td>
+<td class="gt_row gt_left" headers="column.label">P138_COD. ¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)? (Otro, ¿cuál?) [Otro/a]</td>
 <td class="gt_row gt_left" headers="column.class">Factor (No, nunca, Sífilis, Gonorrea, VIH positivo o SIDA, Herpes genital, Clamidia, Virus del papiloma humano (Condiloma acuminado), Otro, Hepatitis B, Molusco contagioso, Infeccion Urinaria, Uretritis, Hongos o bacterias vaginales, Berrugas y/o condiomas, NS, NR)</td>
 <td class="gt_row gt_right" headers="NA.">0</td>
 </tr>
@@ -10014,23 +10011,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"ENJUV 2022"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="cbmdugjwit" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#cbmdugjwit table {
+<div id="doctxikndx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#doctxikndx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cbmdugjwit thead, #cbmdugjwit tbody, #cbmdugjwit tfoot, #cbmdugjwit tr, #cbmdugjwit td, #cbmdugjwit th {
+#doctxikndx thead, #doctxikndx tbody, #doctxikndx tfoot, #doctxikndx tr, #doctxikndx td, #doctxikndx th {
   border-style: none;
 }
 
-#cbmdugjwit p {
+#doctxikndx p {
   margin: 0;
   padding: 0;
 }
 
-#cbmdugjwit .gt_table {
+#doctxikndx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -10056,12 +10053,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_caption {
+#doctxikndx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cbmdugjwit .gt_title {
+#doctxikndx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -10073,7 +10070,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#cbmdugjwit .gt_subtitle {
+#doctxikndx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -10085,7 +10082,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#cbmdugjwit .gt_heading {
+#doctxikndx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -10097,13 +10094,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_bottom_border {
+#doctxikndx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_col_headings {
+#doctxikndx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -10118,7 +10115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_col_heading {
+#doctxikndx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -10138,7 +10135,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#cbmdugjwit .gt_column_spanner_outer {
+#doctxikndx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -10150,15 +10147,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#cbmdugjwit .gt_column_spanner_outer:first-child {
+#doctxikndx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cbmdugjwit .gt_column_spanner_outer:last-child {
+#doctxikndx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cbmdugjwit .gt_column_spanner {
+#doctxikndx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -10170,11 +10167,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#cbmdugjwit .gt_spanner_row {
+#doctxikndx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cbmdugjwit .gt_group_heading {
+#doctxikndx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -10200,7 +10197,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#cbmdugjwit .gt_empty_group_heading {
+#doctxikndx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -10215,15 +10212,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#cbmdugjwit .gt_from_md > :first-child {
+#doctxikndx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cbmdugjwit .gt_from_md > :last-child {
+#doctxikndx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cbmdugjwit .gt_row {
+#doctxikndx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -10242,7 +10239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#cbmdugjwit .gt_stub {
+#doctxikndx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -10255,7 +10252,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cbmdugjwit .gt_stub_row_group {
+#doctxikndx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -10269,15 +10266,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#cbmdugjwit .gt_row_group_first td {
+#doctxikndx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cbmdugjwit .gt_row_group_first th {
+#doctxikndx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cbmdugjwit .gt_summary_row {
+#doctxikndx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -10287,16 +10284,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cbmdugjwit .gt_first_summary_row {
+#doctxikndx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_first_summary_row.thick {
+#doctxikndx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cbmdugjwit .gt_last_summary_row {
+#doctxikndx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -10306,7 +10303,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_grand_summary_row {
+#doctxikndx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -10316,7 +10313,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cbmdugjwit .gt_first_grand_summary_row {
+#doctxikndx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -10326,7 +10323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_last_grand_summary_row_top {
+#doctxikndx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -10336,11 +10333,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_striped {
+#doctxikndx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cbmdugjwit .gt_table_body {
+#doctxikndx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -10349,7 +10346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_footnotes {
+#doctxikndx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -10363,7 +10360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_footnote {
+#doctxikndx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -10372,7 +10369,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cbmdugjwit .gt_sourcenotes {
+#doctxikndx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -10386,7 +10383,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cbmdugjwit .gt_sourcenote {
+#doctxikndx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -10394,63 +10391,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cbmdugjwit .gt_left {
+#doctxikndx .gt_left {
   text-align: left;
 }
 
-#cbmdugjwit .gt_center {
+#doctxikndx .gt_center {
   text-align: center;
 }
 
-#cbmdugjwit .gt_right {
+#doctxikndx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cbmdugjwit .gt_font_normal {
+#doctxikndx .gt_font_normal {
   font-weight: normal;
 }
 
-#cbmdugjwit .gt_font_bold {
+#doctxikndx .gt_font_bold {
   font-weight: bold;
 }
 
-#cbmdugjwit .gt_font_italic {
+#doctxikndx .gt_font_italic {
   font-style: italic;
 }
 
-#cbmdugjwit .gt_super {
+#doctxikndx .gt_super {
   font-size: 65%;
 }
 
-#cbmdugjwit .gt_footnote_marks {
+#doctxikndx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cbmdugjwit .gt_asterisk {
+#doctxikndx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cbmdugjwit .gt_indent_1 {
+#doctxikndx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cbmdugjwit .gt_indent_2 {
+#doctxikndx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cbmdugjwit .gt_indent_3 {
+#doctxikndx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cbmdugjwit .gt_indent_4 {
+#doctxikndx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cbmdugjwit .gt_indent_5 {
+#doctxikndx .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -14079,11 +14076,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#              repel = TRUE, </span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#              col.var = "cos2",</span></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#              labelsize = 3) </span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#individual k means#############################################################</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#https://rpubs.com/rdelgado/399475</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#              labelsize = 3) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -14181,6 +14174,221 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div>
 <figure class="figure">
 <p><img src="index_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid figure-img" width="1536"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="selection-of-enjuv-2018-variables-and-clustering-with-k-modes" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="selection-of-enjuv-2018-variables-and-clustering-with-k-modes"><span class="header-section-number">3.2</span> Selection of ENJUV 2018 Variables and Clustering with k-Modes</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>famdINJUV2018 <span class="ot">&lt;-</span> female_data_list<span class="sc">$</span><span class="st">`</span><span class="at">BBDD JÓVENES 2018</span><span class="st">`</span> <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(REGION,</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                                                          ZONA,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                                                          NSE,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                                                          P10,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                                                          P12,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                                                          P19_5,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                                                          P22,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                                                          P26,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                                                          P30,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>                                                          P31,</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>                                                          P35_8,</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>                                                          P35_9,</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>                                                          P107,</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>                                                          P112_1,</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>                                                          P112_2,</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>                                                          P112_3,</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>                                                          P112_4,</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>                                                          P112_5,</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>                                                          P113_1,</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>                                                          P113_2,</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>                                                          P113_3,</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>                                                          P113_4,</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>                                                          P113_5,</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>                                                          P116_1,</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>                                                          P116_4,</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>                                                          P120,</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>                                                          P121,</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>                                                          P126_1,</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>                                                          P128,</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>                                                          P138_1,</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>                                                          P139,</span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>                                                          P140) <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>()</span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to remove SPSS attributes</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>remove_spss_attrs <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (col <span class="cf">in</span> <span class="fu">names</span>(df)) {</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">attr</span>(df[[col]], <span class="st">"format.spss"</span>) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">attr</span>(df[[col]], <span class="st">"display_width"</span>) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>famdINJUV2018 <span class="ot">&lt;-</span> famdINJUV2018 <span class="sc">%&gt;%</span></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">as_factor</span>(.)))</span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Función para eliminar atributos SPSS y obtener etiquetas de columnas</span></span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>get_labels <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>  labels <span class="ot">&lt;-</span> <span class="fu">sapply</span>(df, <span class="cf">function</span>(col) <span class="fu">attr</span>(col, <span class="st">"label"</span>))</span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(labels) <span class="ot">&lt;-</span> <span class="fu">names</span>(df)</span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>  labels</span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener etiquetas de columnas</span></span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">&lt;-</span> <span class="fu">get_labels</span>(famdINJUV2018)</span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Cambiar nombres de columnas por las etiquetas</span></span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>famdINJUV2018 <span class="ot">&lt;-</span> famdINJUV2018 <span class="sc">%&gt;%</span></span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(<span class="sc">~</span> labels[.x], <span class="fu">everything</span>())</span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Función para eliminar atributos SPSS</span></span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>remove_spss_attrs <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (col <span class="cf">in</span> <span class="fu">names</span>(df)) {</span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">attr</span>(df[[col]], <span class="st">"format.spss"</span>) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">attr</span>(df[[col]], <span class="st">"display_width"</span>) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminar atributos SPSS</span></span>
+<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a>famdINJUV2018_clean <span class="ot">&lt;-</span> <span class="fu">remove_spss_attrs</span>(famdINJUV2018)</span>
+<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a>res.mca <span class="ot">&lt;-</span> <span class="fu">MCA</span>(famdINJUV2018_clean, <span class="at">graph =</span> F, <span class="at">ncp=</span><span class="dv">10</span>)</span>
+<span id="cb21-73"><a href="#cb21-73" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_screeplot</span>(res.mca, <span class="at">addlabels =</span> <span class="cn">TRUE</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">50</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="1344"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fviz_mca_biplot(res.mca, repel = TRUE)</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Contribution of variables to dimensions</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># fviz_contrib(res.mca, choice = "var", axes = 1, top = 10)</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># fviz_contrib(res.mca, choice = "var", axes = 2, top = 10)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fviz_contrib(res.mca, choice = "var", axes = 3, top = 10)</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot of the variable categories</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_mca_var</span>(res.mca, <span class="at">choice =</span> <span class="st">"mca.cor"</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>, <span class="at">labelsize =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-2.png" class="img-fluid figure-img" width="1344"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fviz_cos2(res.mca, choice = "var", axes = 2)</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># fviz_contrib(res.mca, choice = "var", axes = 2, top = 15)</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># fviz_mca_var(res.mca, </span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#              repel = TRUE, </span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#              col.var = "cos2",</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">#              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#              labelsize = 3) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>kmodes_result_all <span class="ot">&lt;-</span> <span class="fu">kmodes</span>(<span class="fu">as.matrix</span>(famdINJUV2018_clean), <span class="at">iter.max =</span> <span class="dv">1000</span>, <span class="at">modes =</span> <span class="dv">15</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadir los resultados del clustering a los datos</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>famdINJUV2018_clean<span class="sc">$</span>Cluster <span class="ot">&lt;-</span> kmodes_result_all<span class="sc">$</span>cluster</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular la proporción de cada cluster dentro de los niveles de P128</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>proportion_p128 <span class="ot">&lt;-</span> famdINJUV2018_clean <span class="sc">%&gt;%</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(<span class="st">`</span><span class="at">P128. ¿Te ha tocado vivir un embarazo no planificado?</span><span class="st">`</span>, Cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">P128. ¿Te ha tocado vivir un embarazo no planificado?</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Proportion =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="st">`</span><span class="at">P128. ¿Te ha tocado vivir un embarazo no planificado?</span><span class="st">`</span> <span class="sc">!=</span> <span class="st">"NS/NR"</span>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrar los datos para el cluster 7 con la respuesta "Sí" en P128</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>cluster11_yes <span class="ot">&lt;-</span> famdINJUV2018_clean <span class="sc">%&gt;%</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Cluster <span class="sc">==</span> <span class="dv">11</span> <span class="sc">&amp;</span> <span class="st">`</span><span class="at">P128. ¿Te ha tocado vivir un embarazo no planificado?</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Si"</span>)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrar los datos para el cluster 4 con la respuesta "No" en P128</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>cluster9_no <span class="ot">&lt;-</span> famdINJUV2018_clean <span class="sc">%&gt;%</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Cluster <span class="sc">==</span> <span class="dv">9</span> <span class="sc">&amp;</span> <span class="st">`</span><span class="at">P128. ¿Te ha tocado vivir un embarazo no planificado?</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"No"</span>)</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadir una columna para la respuesta en P128</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>cluster11_yes <span class="ot">&lt;-</span> cluster11_yes <span class="sc">%&gt;%</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Response =</span> <span class="st">"Si"</span>)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>cluster9_no <span class="ot">&lt;-</span> cluster9_no <span class="sc">%&gt;%</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Response =</span> <span class="st">"No"</span>)</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Combinar ambos clusters en un solo data frame</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>combined_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(cluster11_yes, cluster9_no)</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Convertir los datos a formato largo</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>data_long_combined <span class="ot">&lt;-</span> combined_data <span class="sc">%&gt;%</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Cluster, <span class="sc">-</span><span class="st">`</span><span class="at">P128. ¿Te ha tocado vivir un embarazo no planificado?</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>Response, <span class="at">names_to =</span> <span class="st">"Variable"</span>, <span class="at">values_to =</span> <span class="st">"Value"</span>)</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular las frecuencias de los niveles de las variables</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>frequencies_combined <span class="ot">&lt;-</span> data_long_combined <span class="sc">%&gt;%</span></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Response, Variable, Value) <span class="sc">%&gt;%</span></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Frequency =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">'drop'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar la comparación de proporciones</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(proportion_p128, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Cluster), <span class="at">y =</span> Proportion, <span class="at">fill =</span> <span class="st">`</span><span class="at">P128. ¿Te ha tocado vivir un embarazo no planificado?</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Si"</span> <span class="ot">=</span> <span class="st">"purple"</span>, <span class="st">"No"</span> <span class="ot">=</span> <span class="st">"lightblue"</span>),</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"Si"</span>, <span class="st">"No"</span>),</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Si"</span>, <span class="st">"No"</span>)) <span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"P128 ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?"</span>, <span class="at">x =</span> <span class="st">"Cluster"</span>, <span class="at">y =</span> <span class="st">"Proporción"</span>) <span class="sc">+</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Comparación de Proporciones de Clusters entre niveles de P128"</span>) <span class="sc">+</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">0</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"top"</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="1536"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar las frecuencias con coord_flip y sin leyenda, ajustando las etiquetas y el tamaño del texto</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(frequencies_combined, <span class="fu">aes</span>(<span class="at">x =</span> Value, <span class="at">y =</span> Frequency, <span class="at">fill =</span> Response)) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Variable, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">labeller =</span> <span class="fu">label_wrap_gen</span>(<span class="at">width =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Si"</span> <span class="ot">=</span> <span class="st">"purple"</span>, <span class="st">"No"</span> <span class="ot">=</span> <span class="st">"skyblue"</span>),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"Si"</span>, <span class="st">"No"</span>),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Si"</span>, <span class="st">"No"</span>)) <span class="sc">+</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Nivel"</span>, <span class="at">y =</span> <span class="st">"Frecuencia"</span>, <span class="at">fill =</span> <span class="st">"P128 ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?"</span>) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Frecuencias de Niveles de Variables en los Clusters para Respuestas 'Si' y 'No' en P128"</span>) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">6</span>),</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>),</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>),</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"top"</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid figure-img" width="1536"></p>
 </figure>
 </div>
 </div>
