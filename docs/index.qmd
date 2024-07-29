@@ -30,7 +30,7 @@ install_and_load_packages <- function(packages) {
   }
 }
 
-necessary_packages <- c("haven", "knitr", "readxl", "tidyverse", "data.table", "survey", "scales","gt")
+necessary_packages <- c("haven", "knitr", "readxl", "tidyverse","Hmisc", "data.table", "survey", "scales","gt","FactoMineR","factoextra","vcd","reshape2","corrplot","klaR", "stringr")
 
 install_and_load_packages(necessary_packages)
 
@@ -138,6 +138,189 @@ summarize_columns <- function(df) {
   
   return(summary_df)
 }
+
+preguntas_encabezados_2018 <- c(
+  P1 = "En los últimos 12 meses, es decir, desde (XXXX) hasta hoy, ¿has participado activamente en alguna de las siguientes organizaciones o grupo organizado?",
+  P2 = "¿Y participaste con algún cargo de dirigente u organizador/a?",
+  P5 = "En los últimos 12 meses, es decir, desde (XXXX) hasta hoy, ¿cuáles de las siguientes actividades de ayuda a la comunidad o trabajo de voluntariado NO REMUNERADO has realizado?",
+  P7 = "Ahora te voy a leer una serie de actividades de tiempo libre, me gustaría que me dijeras para cada una de ellas con qué frecuencia la prácticas",
+  P9 = "Utilizando una escala de 1 a 5, donde “1” es muy insatisfecho/a y “5” es muy satisfecho/a, ¿qué tan satisfecho/a estás tú con los siguientes aspectos de tu vida?",
+  P18 = "Utilizando una escala de 1 a 5, donde “1” es muy en desacuerdo y “5” muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes iniciativas?",
+  P19 = "Utilizando una escala de 1 a 5, donde “1” es muy en desacuerdo y “5” muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes afirmaciones?",
+  P25 = "¿A través de qué modalidades pagas o pagaste tu educación?",
+  P35 = "Utilizando una escala de 1 a 7, donde 1 es pésimo y 7 excelente, evalúa los siguientes aspectos del establecimiento educacional donde cursas o cursaste tu educación media. Puedes utilizar cualquier número entre 1 y 7",
+  P36 = "Utilizando una escala de 1 a 5, donde “1” es muy en desacuerdo y “5” muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes afirmaciones?",
+  P40 = "Te leeré una serie de preguntas y quiero pedirte que me respondas sí o no",
+  P44 = "Pensando en las redes sociales como Facebook o Twitter, ¿qué tan de acuerdo o en desacuerdo estás con las siguientes afirmaciones?",
+  P47 = "En los últimos doce meses, es decir, desde (XXXX) hasta hoy, ¿has realizado alguna de las siguientes acciones?",
+  P48 = "Voy a leer una lista de acciones que las personas pueden realizar para expresar sus demandas. Usando esta escala, donde 1 es “nunca se justifica” y 10 es “siempre se justifica”, ¿podrías decirme cuántose justifican las siguientes acciones?",
+  P49 = "Utilizando una escala de 1 a 10 donde “1” es “Desconfías completamente” y “10” es “Confías completamente”, ¿cuánto confías en cada una de estas personas? Puedes utilizar cualquier número entre 1 y 10",
+  P50 = "Utilizando una escala de 1 a 10 donde “1” es “Desconfías completamente” y “10” es “Confías completamente”, ¿cuánto confías en cada una de estas instituciones? Puedes utilizar cualquier número entre 1 y 10.",
+  P51 = "¿Te has sentido discriminado alguna vez EN LA VIDA por las siguientes personas?",
+  P52 = "¿En el ÚLTIMO MES, te has sentido discriminado por alguna de las siguientes razones?",
+  P53 = "Utilizando una escala de 1 a 5, donde “1” es muy en desacuerdo y “5” muy de acuerdo, ¿qué tan de acuerdo o en desacuerdo estás tú con las siguientes afirmaciones sobre la población migrante que reside en el país?",
+  P77 = "Utilizando una escala de 1 a 5, donde “1” es muy insatisfecho/a y “5” es muy satisfecho/a, ¿cuán satisfecho/a te sientes con cada uno de los siguientes aspectos de tu trabajo?",
+  P84 = "¿Con qué frecuencia realizas las siguientes actividades en Internet?",
+  P85 = "Pensando en las redes sociales que utilizas, ¿cuán seguido visitas o usas las siguientes?",
+  P86 = "Pensando en las cosas que tienes en tu vida, ¿me podrías decir cuán difícil sería para ti renunciar a estas…?",
+  P87 = "Utilizando una escala de 1 a 5, donde “1” es muy en desacuerdo y “5” muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes afirmaciones?",
+  P96 = "¿Con quién vives la mayor parte del año?, ¿con quién más?",
+  P97 = "En una semana normal, ¿que tan seguido has vivido las siguiente situaciones en tu relación de pareja?",
+  P99 = "En un mes normal, ¿el o los ingresos que recibes te permiten cubrir las siguientes necesidades?",
+  P103 = "¿Cuál es TU nacionalidad?",
+  P112 = "¿En los últimos 12 MESES, has consumido las siguientes sustancias…?",
+  P117 = "¿Te has iniciado sexualmente, es decir, has tenido relaciones sexuales con penetración?",
+  P120 = "¿A qué edad tuviste tu primera relación sexual con penetración?",
+  P121 = "¿Con cuantas personas has tenido relaciones sexuales en los ultimos doce meses?",
+  P123 = "¿Qué método(s) anticonceptivo(s) usaste tú o tu pareja en tu PRIMERA relación sexual?",
+  P128 = "¿Te ha tocado vivir un embarazo no planificado?",
+  P129 = "¿Qué edad tenías tú cuando te tocó vivir a ti o tu pareja un embarazo no planificado?",
+  P130 = "¿Te has hecho o inducido algún aborto?",
+  P131 = "Y este aborto, ¿fue realizado bajo alguna causal?",
+  P138 = "¿Alguna vez en la vida un profesional de la salud te ha diagnosticado una infección de transmisión sexual (ITS)?",
+  P149 = "Aunque sea solo una vez, ¿se ha dado alguna de las siguientes situaciones en tu relación de pareja actual?",
+  P150 = "Por favor responde si o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo",
+  P151 = "Por favor responde si o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo"
+)
+
+for (col in colnames(female_data_list$`BBDD JÓVENES 2018`)) {
+  prefix <- sub("(P\\d+).*", "\\1", col)
+  if (prefix %in% names(preguntas_encabezados_2018)) {
+    current_label <- ifelse(is.null(label(female_data_list$`BBDD JÓVENES 2018`[[col]])), "", label(female_data_list$`BBDD JÓVENES 2018`[[col]]))
+    cleaned_label <- gsub("^(P\\d+\\.?\\s*)|(_\\d+\\.?\\s*)", "", current_label)
+    new_label <- paste0(col, ". ", preguntas_encabezados_2018[prefix], " ", cleaned_label)
+    label(female_data_list$`BBDD JÓVENES 2018`[[col]]) <- new_label
+  }
+}
+
+preguntas_encabezados_2022 <- c(
+  P1 = "En los últimos 12 meses, es decir, desde (xxx) hasta hoy, ¿has participado activamente en alguna de las siguientes organizaciones o grupo organizado?",
+  P2 = "¿Y participaste con algún cargo de dirigente u organizador/a?",
+  P3 = "En los últimos 12 meses, es decir, desde (xxx), hasta hoy, ¿cuáles de las siguientes actividades de ayuda a la comunidad o trabajo de voluntariado NO REMUNERADO has realizado?",
+  P4 = "Durante el último año, ¿has participado en algún espacio o procedimiento de participación de alguna institución del Estado relacionada con las políticas de juventud? (Por ejemplo, en votaciones o consultas)",
+  P5 = "En general, tú dirías que eres...",
+  P6 = "De 1 a 5, donde 1 es muy insatisfecho/a y 5 es muy satisfecho/a, ¿qué tan satisfecho estás con los siguientes aspectos de tu vida?",
+  P7 = "¿Qué crees tú que es lo más importante para ser feliz en la vida?",
+  P8 = "Según tu opinión, ¿cuál consideras tú que es la condición más importante para que te vaya bien en la vida?",
+  P9 = "En términos generales, ¿cómo crees que vas a estar tú en cinco años más, mejor, igual o peor que ahora?",
+  P10 = "¿Y cómo crees que va a estar Chile en 5 años más, mejor, igual o peor que ahora?",
+  P11 = "De 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás con las siguientes iniciativas?",
+  P12 = "De 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes afirmaciones?",
+  P13 = "¿Asistes actualmente alguna institución de educación básica, media o superior; o en algún programa de nivelación de estudio dirigido a personas que no completaron la enseñanza básica y media?",
+  P14 = "¿Cuál es tu nivel más alto alcanzado o tu nivel educacional actual?",
+  P15 = "¿En qué tipo de institución realizas o realizaste tu educación superior?",
+  P16 = "¿A través de qué modalidades pagas o pagaste tu educación?",
+  P17 = "¿De qué tipo de establecimiento te graduaste de la educación media?",
+  P18 = "¿Cuál es la principal razón por la que NO estás estudiando?",
+  P19 = "De 1 a 7, donde 1 es pésima y 7 es excelente, ¿cómo consideras que es...",
+  P20 = "Según tu opinión, ¿cuál es la cosa más importante que puedo lograr en la vida con la educación que recibes o has recibido?",
+  P21 = "Utilizando una escala de 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás tú con las siguientes afirmaciones?",
+  P22 = "¿Qué tan interesado/a estás en la política?",
+  P23 = "¿Con cuál de las siguientes frases estás más de acuerdo?",
+  P24 = "En tu caso, tú...",
+  P25 = "En la elección de convencionales constituyentes de mayo de 2021, tú...",
+  P26 = "¿Con qué sector político te sientes más identificado/a?",
+  P27 = "De 1 a 5, donde 1 es muy insatisfecho/a y 5 muy satisfecho/a, ¿cuán satisfecho/a estás con la democracia en Chile?",
+  P28 = "Utilizando una escala de 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo estás con las siguientes afirmaciones sobre las redes sociales?",
+  P29 = "Una ley que te parece mala o injusta está a punto de ser aprobada en el congreso, ¿cuál es la principal acción que realizarías para dar a conocer tu opinión frente a las autoridades?",
+  P30 = "Considerando el contexto de movilizaciones en octubre de 2019, ¿realizaste alguna de las siguientes acciones?",
+  P31 = "¿Te has sentido discriminado/a alguna vez EN LA VIDA por las siguientes personas?",
+  P32 = "¿En el ÚLTIMO mes te has sentido discriminado/a por alguna de las siguientes razones?",
+  P33 = "Utilizando una escala de 1 a 5, donde 1 es muy en desacuerdo y 5 muy de acuerdo, ¿qué tan de acuerdo o en desacuerdo estás tú con las siguientes afirmaciones sobre la población inmigrante que reside en el país?",
+  P34 = "¿Cuál crees tú que es el grupo de personas que sufre MÁS discriminación en nuestro país?",
+  P35 = "De 1 a 7, donde 1 es pésima y 7 es excelente, ¿cómo evalúas las oportunidades para conseguir un buen trabajo hoy para una persona joven como tú en Chile?",
+  P36 = "Aunque no trabajaste la semana pasada, ¿trabajaste al menos una hora sin considerar los quehaceres de su hogar?",
+  P37 = "Aunque no trabajaste la semana pasada, ¿realizaste alguna actividad por lo menos durante una hora?",
+  P38 = "Aunque no trabajaste la semana pasada, ¿tenías algún empleo, negocio o actividad del cual estuviste ausente temporalmente por licencia, huelga, vacaciones u otra razón?",
+  P39 = "¿Has trabajado alguna vez en la vida?",
+  P40 = "¿Buscaste trabajo remunerado o realizaste alguna gestión para iniciar una actividad por cuenta propia?",
+  P41 = "¿Cuál es la principal razón por la que NO buscas trabajo o realizaste alguna gestión para iniciar una actividad por cuenta propia (negocio o empresa), en las últimas 4 semanas?",
+  P42 = "¿Bajo qué condición estarías dispuesto/a a volver a buscar trabajo?",
+  P43 = "¿Cuánto tiempo buscaste o has estado buscando empleo?",
+  P44 = "¿Cuál es la principal razón para trabajar o estar buscando trabajo?",
+  P45 = "Habitualmente, ¿cuántas horas trabajas en la semana en tu trabajo, negocio o actividad principal?",
+  P46 = "¿Y estarías dispuesto/a a trabajar más horas a la semana?",
+  P47 = "¿Cuál es la principal razón por la que tienes este tipo de jornada laboral?",
+  P48 = "Y en tu empleo, tú trabajas como...",
+  P49 = "¿Qué tipo de contrato escrito tienes en tu principal trabajo?",
+  P50 = "Siendo 1 muy insatisfecho/a y 5 muy satisfecho/a, ¿cuán satisfecho/a te sientes con cada uno de los siguientes aspectos de tu trabajo?",
+  P51 = "¿Cotizaste durante el mes pasado en algún sistema previsional o de pensiones como, AFP, DIPRECA o CAPREDENA?",
+  P52 = "¿Cuál es la principal razón por la que no cotizaste el mes pasado en algún sistema previsional o de pensiones como, AFP, DIPRECA, CAPREDENA?",
+  P53 = "¿Cuál es tu situación de pareja actual?",
+  P54 = "¿Cuántos hijos/as tienes?",
+  P55 = "¿Qué edad tiene el o la mayor?",
+  P56 = "¿Cuántos hijos/as quieres tener en total?",
+  P57 = "¿Dónde vives habitualmente la mayor parte del año?",
+  P58 = "¿Con quién vives la mayor parte del año?, ¿con quién más?",
+  P59 = "Considerando el mes anterior, ¿de dónde provienen tus ingresos?",
+  P60 = "En un mes normal, ¿el o los ingresos que recibes te permiten cubrir las siguientes necesidades?",
+  P61 = "Piense sólo en las deudas que están a TU NOMBRE, ¿tienes deudas, ya sea vencidas o al día, en...?",
+  P62 = "¿Te sientes una persona endeudada?",
+  P63 = "¿Cuál es tu nacionalidad?",
+  P64 = "Cuando naciste, ¿en qué comuna o país vivía tu madre?",
+  P65 = "¿En qué año llegaste al país?",
+  P66 = "¿Te identificas con alguna religión?",
+  P67 = "¿Tienes tú algunas de las siguientes condiciones permanentes y/o de larga duración?",
+  P68 = "¿Perteneces o desciendes de algún pueblo originario?",
+  P69 = "¿Cuál es tu sistema de salud?",
+  P70 = "¿Tú eres el jefe(a) de tu hogar o principal sostenedor(a)?",
+  P71 = "¿Cuál es tu actividad o trabajo?",
+  P72 = "¿Cuál es la actividad o trabajo del jefe de su hogar, o la que realizaba cuando trabajaba (EN CASO DE JUBILADOS)?",
+  P73 = "¿Y cuál es tu ocupación principal?",
+  P74 = "¿Cuál es tu nivel de estudios alcanzado?",
+  P75 = "¿Y cuál es el nivel de estudios que alcanzó el o la jefa/a de su hogar?",
+  P76 = "SIGAMOS, ¿Y en los últimos 12 MESES, has consumido las siguientes sustancias...?",
+  P77 = "De la siguiente lista, ¿podrías indicar cada cuánto tiempo consumes...?",
+  P78 = "¿Te has iniciado sexualmente, es decir, has tenido relaciones sexuales con penetración?",
+  P79 = "¿Cuál es tu orientación sexual?",
+  P80 = "En cuanto a tu género, tú te identificas como...",
+  P81 = "¿A qué edad tuviste tu primera relación sexual?",
+  P82 = "¿Con cuántas personas has tenido relaciones sexuales en los últimos doce meses?",
+  P83 = "¿Con quién tuviste tu PRIMERA relación sexual?",
+  P84 = "¿Qué método(s) anticonceptivo(s) usaste tú o tu pareja sexual en tu PRIMERA relación sexual?",
+  P85 = "¿Con quién tuviste tu última relación sexual?",
+  P86 = "¿Qué método(s) anticonceptivo(s) usaste tú o tu pareja sexual en tu última relación sexual?",
+  P87 = "En tu última relación sexual, ¿Por qué razón o razones no usaste algún método anticonceptivo o de protección/prevención?",
+  P88 = "En tu última relación sexual, ¿Por qué razón o razones se usó condón?",
+  P89 = "¿Te ha tocado vivir un embarazo no planificado?",
+  P90 = "¿Qué edad tenías tú cuando te tocó vivir a ti o tu pareja sexual un embarazo no planificado?",
+  P91 = "¿Te has hecho o inducido algún aborto?",
+  P92 = "¿Qué edad tenías tú cuando te hiciste o indujiste un aborto?",
+  P93 = "Y este aborto, ¿fue realizado bajo alguna de las tres causales reconocidas por la ley?",
+  P94 = "¿Estarías dispuesta a que tú o tu pareja se realizaran o indujeran un aborto?",
+  P95 = "Indica si tú crees que el VIH se puede transmitir con cada una de las siguientes prácticas",
+  P96 = "¿Te has realizado alguna vez el test del VIH (para prevención de SIDA)?",
+  P97 = "¿Cuál es la principal razón por la que te lo realizaste?",
+  P98 = "¿Cuál es la principal razón por la que NO te hiciste el test del VIH (para prevención del SIDA)?",
+  P99 = "¿Has sido alguna vez diagnosticado con una infección de transmisión sexual (ITS)?",
+  P100 = "¿Has practicado alguna vez sexo oral?",
+  P101 = "¿Has practicado alguna vez sexo anal?",
+  P102 = "¿Con qué frecuencia durante las últimas dos semanas has sentido alguna de las siguientes molestias?",
+  P103 = "¿Recibes actualmente algún tratamiento para algún problema de salud mental, como depresión, ansiedad u otro?",
+  P104 = "¿Cuál fue el diagnóstico por el que recibes este tipo de tratamiento?",
+  P105 = "Si quisieras o necesitaras recibir atención profesional, ¿qué tan posible sería para ti o tu familia costear esa atención por un período prolongado de tiempo...?",
+  P106 = "¿Has sido víctima de violencia física en alguna de estas situaciones?",
+  P107 = "¿Has sido víctima de violencia psicológica en alguna de estas situaciones?",
+  P108 = "Aunque sea solo una vez, ¿se ha dado alguna de las siguientes situaciones en tu relación de pareja actual?",
+  P109 = "Por favor responde sí o no a las siguientes preguntas respecto al comportamiento de tu pareja contigo",
+  P110 = "Por favor responde sí o no a las siguientes preguntas respecto a tu comportamiento con tu pareja",
+  P111 = "¿En los últimos 12 meses has sufrido alguno de los siguientes tipos de cyberbullying o acoso cibernético?",
+  P112 = "¿En los últimos 12 meses has realizado alguno de los siguientes tipos de cyberbullying o acoso cibernético?"
+)
+
+# Iterar sobre todas las columnas y aplicar las nuevas etiquetas en BBDD JÓVENES 2022
+for (col in colnames(female_data_list$`BBDD JÓVENES 2022`)) {
+  prefix <- sub("(P\\d+).*", "\\1", col)  # Extrae el prefijo de la columna
+  if (prefix %in% names(preguntas_encabezados_2022)) {
+    current_label <- ifelse(is.null(label(female_data_list$`BBDD JÓVENES 2022`[[col]])), "", label(female_data_list$`BBDD JÓVENES 2022`[[col]]))
+    # Eliminar cualquier número y punto al inicio, así como cualquier guion bajo
+    cleaned_label <- gsub("^(P\\d+\\.?\\s*)|(_\\d+\\.?\\s*)", "", current_label)
+    new_label <- paste0(col, ". ", preguntas_encabezados_2022[prefix], " ", cleaned_label)
+    label(female_data_list$`BBDD JÓVENES 2022`[[col]]) <- new_label
+  }
+}
+
+sapply(female_data_list$`BBDD JÓVENES 2012`, label)
 
 summary_table_2015 <- summarize_columns(female_data_list$`BBDD JÓVENES 2015`)
 summary_table_2018 <- summarize_columns(female_data_list$`BBDD JÓVENES 2018`)
@@ -329,27 +512,187 @@ ggplot(results_df_2, aes(x=as.factor(Años), y=Total, fill=as.factor(Años))) +
 # ggsave("fig3.png", width = 10, height = 6, dpi = 600)
 ```
 
+## Selection of ENJUV 2015 Variables and Clustering with k-Modes
 ```{r}
-dat_for_kmeans<-female_data_list[[6]][,314:405]
-# for (i in c(1:6,8,10:17)) {
-#   dat2[,i]<-factor(dat2[,i], levels = levels(dat2[,i]), labels = paste0(colnames(dat2[i]),"_",levels(dat2[,i])))
-# }
-# 
-# res.famd <- FAMD(dat2, graph = F)
-# fviz_screeplot(res.famd)
-# fviz_famd_var(res.famd, "quanti.var", col.var = "contrib",
-#               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-#               repel = TRUE)
-# fviz_famd_var(res.famd, "quali.var", col.var = "contrib",
-#               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-#               repel = TRUE,labelsize = 3)
-# fviz_famd_var(res.famd, col.var = "contrib",
-#               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-#               repel = TRUE)
-# fviz_famd_ind(res.famd, col.ind = "contrib",
-#               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-#               repel = TRUE,geom = "point")
+#| fig.width: 14
+#| fig.height: 12
+
+famdINJUV2015 <- female_data_list$`BBDD JÓVENES 2015` %>% dplyr::select(REGION,
+                                                          ZONA,
+                                                          P10,
+                                                          P12,
+                                                          P18.4,
+                                                          P26,
+                                                          P27,
+                                                          P35.10,
+                                                          P94,
+                                                          P105,
+                                                          P106,
+                                                          P110.1,
+                                                          P110.2,
+                                                          P110.3,
+                                                          P110.4,
+                                                          P110.5,
+                                                          P110.6,
+                                                          P110.7,
+                                                          P110.8,
+                                                          P110.9,
+                                                          P110.10,
+                                                          P110.11,
+                                                          P110.12,
+                                                          P110.13,
+                                                          P116.1,
+                                                          P116.3,
+                                                          P118,
+                                                          P119,
+                                                          P121,
+                                                          P122,
+                                                          P128,
+                                                          P129) %>% drop_na()
+
+# Function to remove SPSS attributes
+remove_spss_attrs <- function(df) {
+  for (col in names(df)) {
+    attr(df[[col]], "format.spss") <- NULL
+    attr(df[[col]], "display_width") <- NULL
+  }
+  return(df)
+}
+
+famdINJUV2015 <- famdINJUV2015 %>%
+  mutate(across(everything(), ~ as_factor(.)))
+
+# Función para eliminar atributos SPSS y obtener etiquetas de columnas
+get_labels <- function(df) {
+  labels <- sapply(df, function(col) attr(col, "label"))
+  names(labels) <- names(df)
+  labels
+}
+
+# Obtener etiquetas de columnas
+labels <- get_labels(famdINJUV2015)
+
+# Cambiar nombres de columnas por las etiquetas
+famdINJUV2015 <- famdINJUV2015 %>%
+  rename_with(~ labels[.x], everything())
+
+# Función para eliminar atributos SPSS
+remove_spss_attrs <- function(df) {
+  for (col in names(df)) {
+    attr(df[[col]], "format.spss") <- NULL
+    attr(df[[col]], "display_width") <- NULL
+  }
+  return(df)
+}
+
+# Eliminar atributos SPSS
+famdINJUV2015_clean <- remove_spss_attrs(famdINJUV2015)
+
+res.mca <- MCA(famdINJUV2015_clean, graph = F, ncp=10)
+fviz_screeplot(res.mca, addlabels = TRUE, ylim = c(0, 50))
+# fviz_mca_biplot(res.mca, repel = TRUE)
+# Contribution of variables to dimensions
+# fviz_contrib(res.mca, choice = "var", axes = 1, top = 10)
+# fviz_contrib(res.mca, choice = "var", axes = 2, top = 10)
+# fviz_contrib(res.mca, choice = "var", axes = 3, top = 10)
+
+# Plot of the variable categories
+fviz_mca_var(res.mca, choice = "mca.cor", repel = TRUE, labelsize = 3)
+# fviz_cos2(res.mca, choice = "var", axes = 2)
+# fviz_contrib(res.mca, choice = "var", axes = 2, top = 15)
+# fviz_mca_var(res.mca, 
+#              repel = TRUE, 
+#              col.var = "cos2",
+#              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+#              labelsize = 3) 
+
 
 #individual k means#############################################################
 #https://rpubs.com/rdelgado/399475
 ```
+
+
+```{r}
+set.seed(1234)
+
+kmodes_result_all <- kmodes(as.matrix(famdINJUV2015_clean), iter.max = 1000, modes = 15)
+
+# Añadir los resultados del clustering a los datos
+famdINJUV2015_clean$Cluster <- kmodes_result_all$cluster
+
+# Calcular la proporción de cada cluster dentro de los niveles de P129
+proportion_p129 <- famdINJUV2015_clean %>%
+  count(`P129. ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?`, Cluster) %>%
+  group_by(`P129. ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?`) %>%
+  mutate(Proportion = n / sum(n))
+
+# Filtrar los datos para el cluster 7 con la respuesta "Sí" en P129
+cluster7_yes <- famdINJUV2015_clean %>%
+  filter(Cluster == 7 & `P129. ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?` == "Sí")
+
+# Filtrar los datos para el cluster 4 con la respuesta "No" en P129
+cluster4_no <- famdINJUV2015_clean %>%
+  filter(Cluster == 4 & `P129. ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?` == "No")
+
+# Añadir una columna para la respuesta en P129
+cluster7_yes <- cluster7_yes %>%
+  mutate(Response = "Sí")
+
+cluster4_no <- cluster4_no %>%
+  mutate(Response = "No")
+
+# Combinar ambos clusters en un solo data frame
+combined_data <- bind_rows(cluster7_yes, cluster4_no)
+
+# Convertir los datos a formato largo
+data_long_combined <- combined_data %>%
+  dplyr::select(-Cluster, -`P129. ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?`) %>%
+  pivot_longer(-Response, names_to = "Variable", values_to = "Value")
+
+# Calcular las frecuencias de los niveles de las variables
+frequencies_combined <- data_long_combined %>%
+  group_by(Response, Variable, Value) %>%
+  summarise(Frequency = n(), .groups = 'drop')
+
+
+```
+```{r}
+#| fig.width: 16
+#| fig.height: 12
+
+# Visualizar la comparación de proporciones
+ggplot(proportion_p129, aes(x = factor(Cluster), y = Proportion, fill = `P129. ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?`)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.5) +
+  scale_fill_manual(values = c("Sí" = "purple", "No" = "lightblue"),
+                    breaks = c("Sí", "No"),
+                    labels = c("Sí", "No")) +
+  labs(fill = "P129 ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?", x = "Cluster", y = "Proporción") +
+  ggtitle("Comparación de Proporciones de Clusters entre niveles de P129") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 1, size = 10),
+    axis.text.y = element_text(size = 10),
+    strip.text = element_text(size = 10),
+    legend.position = "top"
+  )
+
+# Visualizar las frecuencias con coord_flip y sin leyenda, ajustando las etiquetas y el tamaño del texto
+ggplot(frequencies_combined, aes(x = Value, y = Frequency, fill = Response)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.5) +
+  facet_wrap(~ Variable, scales = "free_y", labeller = label_wrap_gen(width = 30)) +
+  scale_fill_manual(values = c("Sí" = "purple", "No" = "skyblue"), 
+                    breaks = c("Sí", "No"),
+                    labels = c("Sí", "No")) +
+  labs(x = "Nivel", y = "Frecuencia", fill = "P129 ¿Te ha tocado vivir un embarazo no planificado con alguna pareja o con alguien con quien hayas tenido relaciones sexuales alguna vez?") +
+  ggtitle("Frecuencias de Niveles de Variables en los Clusters para Respuestas 'Sí' y 'No' en P129") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, size = 6),
+    axis.text.y = element_text(size = 6),
+    strip.text = element_text(size = 6),
+    legend.position = "top"
+  ) +
+  coord_flip()
+
+```
+
